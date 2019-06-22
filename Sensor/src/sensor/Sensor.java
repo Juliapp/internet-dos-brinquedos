@@ -22,98 +22,97 @@ import model.TagColetada;
  *
  * @author Teeu Guima
  */
-public class Sensor {
+public class Sensor extends Thread {
 
     private final int tempo = 10000;
     private String[] tags = {"EPC00000", "EPC00001", "EPC00002", "EPC00003"};
     private int count = 0;
     private Transmissao transm;
     private Cronometro cronometro;
-    private Object dado;
-    private Socket socket;
-    private ObjectOutputStream os;
-    private ObjectInputStream is;
 
     public Sensor() {
         this.transm = new Transmissao();
-        this.cronometro = new Cronometro();
     }
 
-    public void abreConexao() throws IOException, ClassNotFoundException {
-        this.socket = new Socket("127.0.0.1", 5555);
-        this.is = new ObjectInputStream(socket.getInputStream());
-        this.dado = is.readObject();
-    }
-
-    public void enviaMensagem(Mensagem obj) throws IOException, ClassNotFoundException {
-        socket = new Socket("127.0.0.1", 5555);
-        Object objeto = (Object) obj;
-
-        ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
-
-        os.writeObject(objeto);
-        os.flush();
-
-        ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
-        this.dado = is.readObject();
-
-        os.reset();
-        os.close();
-        is.close();
-        socket.close();
-
-    }
-
-    /*
-    public void cortaConexão() throws IOException {
-        if (this.dado.equals(false)) {
-            this.os.close();
-            this.is.close();
-            this.socket.close();
+    public boolean verificaPermissao() throws IOException, ClassNotFoundException {
+        transm.enviaMensagem(new Mensagem(Command.StatusCorrida, null, Solicitante.Sensor));
+        if ((boolean) transm.dadoRecebido() == false) {
+            System.out.println("Deu Erro!");
+        } else {
+            System.out.println("Passou Carai!!!");
         }
-
+        return (boolean) transm.dadoRecebido();
     }
-    */
+
     public void lançaTags() throws IOException, ClassNotFoundException {
         Random num = new Random();
-        String[] ordem = new String[3]; //Cria um array para colocar uma ordem nas tags
-        for (int i = 0; i <= tags.length; i++) {
-            ordem[i] = tags[num.nextInt(3)]; //Adiciona a tag pré-cadastrada com uma posição aleatória!
+        String[] ordem = new String[tags.length]; //Cria um array para colocar uma ordem nas tags
+        for (int i = 0; i < tags.length; i++) {
+            int v = num.nextInt(3);
+            ordem[i] = tags[v]; //Adiciona a tag pré-cadastrada com uma posição aleatória!
             TagColetada tag = new TagColetada(ordem[i], cronometro.getCurrentTime()); //Cria o objeto TagColetada pra obter o tempo exato do cronometro
             Mensagem msg = new Mensagem(Command.EnviarTags, tag, Solicitante.Sensor); //Cria o objeto Mensagem pra enviar pro servidor as informações coletadas do sensor!
-            enviaMensagem(msg);
+            transm.enviaMensagem(msg);
         }
-        if ((boolean) dado == true) {
+        if ((boolean) transm.dadoRecebido() == true) {
             System.out.println("Tag Coletada pelo servidor!");
         }
     }
 
+    public Cronometro getCronometro() {
+        return this.cronometro;
+    }
+
+    public void setCronometro(Cronometro cron) {
+        this.cronometro = cron;
+    }
+
+    public boolean observador() throws ClassNotFoundException, IOException, InterruptedException {
+        boolean status;
+
+        do {
+            Thread.sleep(5000);
+            status = verificaPermissao();
+            System.out.println("Enviando Tags.......");
+
+        } while (status == false);
+        return status;
+
+    }
+
+    @Override
+    public void run() {
+
+        try {
+            while (true) {
+                Thread.sleep(10000); //Espera 10 segs pra enviar as tags
+                lançaTags(); //Chama o método que enviar para o servidor as tags!
+                System.out.println("Tags enviadas.......");
+            }
+
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         Sensor sensor = new Sensor();
+        Thread p = sensor;
+
         try {
-            //O laço termina se a permissão for true, ou seja ter dado a largada na corrida
-            sensor.abreConexao();
+            //O laço entra se a permissão dada for true, ou seja ter dado a largada na corrida
+            Cronometro cron = new Cronometro();
 
-            while (true) {
-                boolean status = (boolean) sensor.dado;
-                while (status == true) {
-                    Thread.sleep(40000);
-                    System.out.println("Enviando");
-                    sensor.lançaTags();
-                }
-            }
-            /*
-            while(sensor.observador() == true){
-                sensor.cronometro.comecar(); //Começa a contagem!
-                while(true){
-                    Thread.sleep(40000); //Espera 10 segs pra enviar as tags
-                    sensor.lançaTags(); //Chama o método que enviar para o servidor as tags!
-                    System.out.println("Tags enviadas.......");
-                }
-            }
-             */
+            if(sensor.observador() == true) {
+                cron.comecar();
+                sensor.setCronometro(cron);
+                new Thread(cron).start();
+                p.start();
 
-        } catch (IOException | ClassNotFoundException e) {
+            }
+
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
 

@@ -17,26 +17,26 @@ import java.net.Socket;
 public class Transmissao {
 
     private Object dado;
-    private Socket socket;
     private ObjectOutputStream os;
     private ObjectInputStream is;
 
-    /*public Socket solicitaSocket() throws IOException {
+    public Socket abreConexao() throws IOException {
         return new Socket("localhost", 5555);
     }
-     */
-    public void enviaMensagem(Mensagem obj) throws IOException, ClassNotFoundException {
-        socket = new Socket("127.0.0.1", 5555);
-        Object objeto = (Object) obj;
 
-        ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
+    public void enviaMensagem(Mensagem obj) throws IOException, ClassNotFoundException {
+        
+        Socket socket = abreConexao();
+        
+        Object objeto = (Object) obj;
+        this.os = new ObjectOutputStream(socket.getOutputStream());
 
         os.writeObject(objeto);
         os.flush();
 
-        ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
+        this.is = new ObjectInputStream(socket.getInputStream());
         this.dado = is.readObject();
-
+        
         os.reset();
         os.close();
         is.close();
@@ -44,26 +44,32 @@ public class Transmissao {
 
     }
 
-    public void esperaMensagem() throws IOException, ClassNotFoundException {
-        this.socket = new Socket("127.0.0.1", 5555);
-        this.is = new ObjectInputStream(socket.getInputStream());
+    public void solicitaMensagem(Mensagem msg) throws IOException, ClassNotFoundException {
+        Socket socket = abreConexao();
         
+        Object objeto = (Object) msg;
         
+        ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
         
 
-    }
-
-    public void cortaConexão() throws IOException {
-        if (this.dado.equals(false)) {
-            this.os.close();
-            this.is.close();
-            this.socket.close();
+        os.writeObject(objeto);
+        os.flush();
+        
+        ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
+        this.dado = is.readObject();
+        
+        if(this.dado == null){
+            System.out.println("Não chegou nada!");
         }
+        os.reset();
+        os.close();
+        is.close();
+        socket.close();
 
     }
 
-    public boolean dadoRecebido() {
-        return (boolean) this.dado;
+    public Object dadoRecebido() {
+        return this.dado;
     }
 
 }

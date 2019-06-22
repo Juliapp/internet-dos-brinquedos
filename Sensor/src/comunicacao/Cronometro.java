@@ -39,12 +39,13 @@ public class Cronometro extends Thread{
             try {
                 Thread.sleep(1);
                 conta();
+                
                 System.out.println(cronometro.getMinutos() + " min " + cronometro.getSegundos() + " seg " + cronometro.getMilisegundos());
             } catch (InterruptedException ex) {
                 Logger.getLogger(Cronometro.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
         }
+        
     }
     
     /**
@@ -52,8 +53,8 @@ public class Cronometro extends Thread{
      */
     public void comecar(){
         rodando = true;
-        this.run();
     }
+    
     
     /**
      *

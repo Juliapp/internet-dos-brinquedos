@@ -12,5 +12,5 @@ public enum Command implements Serializable{
     /**
      *
      */
-    PreConfiguracaoCorrida,
+    PreConfiguracaoCorrida, 
 }

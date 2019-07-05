@@ -1,14 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cliente_exibicao.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="655.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cliente_exibicao.FXMLDocumentController">
     <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
+      <TableView id="tabela" layoutX="149.0" layoutY="197.0" prefHeight="417.0" prefWidth="982.0">
+        <columns>
+          <TableColumn id="posicao" prefWidth="58.0" text="POS" />
+          <TableColumn id="cor" prefWidth="48.0" />
+            <TableColumn id="pilotos" prefWidth="235.0" text="PILOTO" />
+            <TableColumn id="times" prefWidth="128.0" text="TIME" />
+            <TableColumn id="tempoDeVolta" prefWidth="243.0" text="TEMPO DE VOLTA " />
+            <TableColumn id="voltaMaisRapida" minWidth="3.0" prefWidth="172.0" text="VOLTA MAIS RÁPIDA " />
+            <TableColumn id="voltas" prefWidth="97.0" text="VOLTAS" />
+        </columns>
+      </TableView>
+      <Text layoutX="204.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SESSÃO DA CORRIDA:" wrappingWidth="326.607421875">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Text>
+      <Text id="tempoCorrida" layoutX="519.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TEMPO" wrappingWidth="259.13671875">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <Text layoutX="810.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recorde do circuito:">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <Text id="tempoRecorde" layoutX="1041.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00:00" wrappingWidth="156.13671875">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <Text layoutX="810.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Autor:">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <Text id="nomeRecord" layoutX="889.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome ">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
     </children>
 </AnchorPane>

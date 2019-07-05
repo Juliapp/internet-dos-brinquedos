@@ -1,9 +1,11 @@
-package comunicacao;
+package facade;
 
+import comunicacao.Mensagem;
 import java.util.ArrayList;
 import java.util.Date;
 import controladores.ControladorFactory;
 import controladores.ControladorCorrida;
+import controladores.ControladorDeClientes;
 import controladores.ControladorDeDados;
 import execoes.CorridaNaoIniciadaException;
 import execoes.PilotoNaoExisteException;
@@ -23,6 +25,8 @@ public class ServidorFacade {
     private ControladorDeDados Dados;
     private ControladorFactory cf;
     private ControladorCorrida corridaAtual;
+    //fazer as modificações para o controlador de cliente aqui no facade
+    private ControladorDeClientes clientes;
     private static ServidorFacade facade;
 
     /**
@@ -37,6 +41,8 @@ public class ServidorFacade {
         cf = new ControladorFactory();
         contrCorrida = new ArrayList<>();
         corridaAtual = new ControladorCorrida();
+        
+        clientes = new ControladorDeClientes();
     }
     
     public static synchronized ServidorFacade getInstance(){
@@ -351,4 +357,7 @@ public class ServidorFacade {
         corridaAtual.pushTag(tag, voltaComputada);
     }
 
+    public ArrayList<Mensagem> getMensagens(){
+        return clientes.getMensagens();
+    }
 }

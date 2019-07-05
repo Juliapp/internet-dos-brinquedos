@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import comunicacao.ServidorFacade;
+import facade.ServidorFacade;
 import execoes.PilotoNaoExisteException;
 import model.Carro;
 import model.Jogador;

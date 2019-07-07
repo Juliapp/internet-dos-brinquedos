@@ -1,6 +1,8 @@
 package facade;
 
+import comunicacao.Conexao;
 import comunicacao.Mensagem;
+import comunicacao.Solicitante;
 import java.util.ArrayList;
 import java.util.Date;
 import controladores.ControladorFactory;
@@ -11,6 +13,7 @@ import execoes.CorridaNaoIniciadaException;
 import execoes.PilotoNaoExisteException;
 import execoes.TagInvalidaException;
 import execoes.VoltaInvalidaException;
+import java.io.IOException;
 import model.Carro;
 import model.Equipe;
 import model.Jogador;
@@ -356,8 +359,23 @@ public class ServidorFacade {
     public void coletorDeTags(TagColetada tag, Time voltaComputada) throws TagInvalidaException, CorridaNaoIniciadaException, VoltaInvalidaException {
         corridaAtual.pushTag(tag, voltaComputada);
     }
+    
+    /***************************** MÉTODOS PARA A COMUNICAÇÃO ********************************/
 
     public ArrayList<Mensagem> getMensagens(){
-        return clientes.getMensagens();
+       // return clientes.getMensagens();
+       return null;
     }
+    
+    public void iniciarClienteADM() throws IOException{                                       
+        clientes.iniciarClienteADM();
+    }
+    
+    public void iniciarClienteASensor() throws IOException{
+        clientes.iniciarClienteASensor();
+    }
+    
+    public void iniciarClienteExibicao() throws IOException{
+        clientes.iniciarClienteExibicao();
+    }        
 }

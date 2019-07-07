@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package comunicacao;
+package controladores;
 
+import comunicacao.Mensagem;
 import facade.ServidorFacade;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -46,6 +47,7 @@ public class ControllerDeTratamento extends Thread {
 
     }
 
+    /*
     @Override
     public void run() {
 
@@ -155,4 +157,5 @@ public class ControllerDeTratamento extends Thread {
         }
 
     }
+    */
 }

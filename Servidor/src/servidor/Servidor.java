@@ -1,102 +1,73 @@
 package servidor;
 
-import comunicacao.ControllerDeTratamento;
+import controladores.ControllerDeTratamento;
 import facade.ServidorFacade;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Servidor {
 
-    private ServerSocket serverSocket;
+    private static ServidorFacade facade;
+    
+    public Servidor(){
+        facade = ServidorFacade.getInstance();
+    }
 
-    public static void main(String[] args) throws ClassNotFoundException {
-        preSet();
-        ServerSocket serverSock;
+    public static void main(String[] args) {
         try {
-            serverSock = new ServerSocket(5555);
-            while (true) {
-                System.out.println("O servidor está rodando na porta" + serverSock.getLocalPort());
-
-                Socket recebido = serverSock.accept();
-                System.out.println("Nova conexão com o cliente "
-                        + recebido.getLocalPort());
-
-                ObjectOutputStream os = new ObjectOutputStream(recebido.getOutputStream());
-                ObjectInputStream is = new ObjectInputStream(recebido.getInputStream());
-
-                Thread t = new ControllerDeTratamento(recebido, os, is);
-                t.start();
-            }
-        } catch (IOException e) {
-
-        }
-
-        /*
-        
-        try {
-            
-            Servidor0001 server = new Servidor0001();
-            server.criarServerSocket(12345);
-                
-            while(true){
-                //Esse loop faz a coneão não se "quebrar" em apenas uma conexão
-                Socket socket = server.esperandoConexao();
-                server.tratarConexao(socket);
-            }
-            
-            
-            
+            Servidor server = new Servidor();
+            server.conectarClientes();
         } catch (IOException ex) {
-            Logger.getLogger(Servidor0001.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
-         */
+        
     }
 
-    private void criarServerSocket(int porta) throws IOException {
-        //cria um socket
-        serverSocket = new ServerSocket(porta);
+    private static void conectarClientes() throws IOException{
+        System.out.println("----- Internet dos brinquedos -----");
+        System.out.println("Vamos fazer a conexão com os clientes");
+        boolean adm = false, sensor = false, exibicao = false;
+        
+        do{
+            System.out.println("Qual dispositivo você quer conectar?");
+            if(!adm){
+                System.out.println("1 - Cliente ADM");
+            }
+            if(!sensor){
+                System.out.println("2 - Cliente sensor");
+            }
+            if(!exibicao){
+                System.out.println("3 - Cliente de exibição");
+            }
+            
+            Scanner s = new Scanner(System.in);
+            int resposta = s.nextInt();
+            
+            switch (resposta){
+                    case 1: 
+                        facade.iniciarClienteADM();
+                        adm = true;
+                        break;
+                    case 2: 
+                        facade.iniciarClienteASensor();
+                        sensor = true;
+                        break;
+                    case 3: 
+                        facade.iniciarClienteExibicao();
+                        exibicao = true;
+                        break;
+                    default:  System.out.println("Resposta incorreta");       
+            }        
+        }while(!adm || !sensor || !exibicao);
     }
-
-    private Socket esperandoConexao() throws IOException {
-        //Faz o socket esperar uma conexão, só da o retorno quando a conexão não é estabelecida
-        Socket socket = serverSocket.accept();
-        return socket;
-    }
-
-    //Vou mexer nisso aqui!
-    private void tratarConexao(Socket socket) throws IOException {
-        //Ponto entre o cliente e o servidor
-        try {
-
-            ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-
-            // pode usar o input.readObject pra pegar um obj do cliente
-            String msg = input.readUTF();
-            System.out.println("Mensagem Recebida: " + msg);
-            output.writeUTF(msg);
-
-            input.close();
-            output.close();
-
-        } catch (IOException e) {
-
-        } finally {
-            //idependente de erro ele fecha o socket
-            fecharSocket(socket);
-        }
-
-    }
-
-    private void fecharSocket(Socket s) throws IOException {
-        s.close();
-    }
-
     private static void preSet() {
         ServidorFacade facade = ServidorFacade.getInstance();
         facade.cadastrarEquipe("MUSTANG");

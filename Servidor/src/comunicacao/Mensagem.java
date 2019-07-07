@@ -4,19 +4,20 @@ import java.io.Serializable;
 
 public class Mensagem implements Serializable {
     private Solicitante solicitante;
-    private boolean hasMensagem;
-    private Object object;
+    private boolean has;
+    private byte[] bytes;
 
     public Mensagem(Solicitante sol) {
         this.solicitante = sol;
+        has = false;
     }
 
-    public Object getObject() {
-        return object;
+    public byte[] getBytes() {
+        return bytes;
     }
 
-    public void setObject(Object object) {
-        this.object = object;
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
     }
 
     public Solicitante getSolicitante() {
@@ -27,8 +28,12 @@ public class Mensagem implements Serializable {
         this.solicitante = solicitante;
     }
     
-    public void hasntMensagem(){
-        hasMensagem = false;
+    public boolean hasMensagem(){
+        return has;
+    }
+    
+    public void enviouMensagem(){
+        has = false;
     }
     
 }

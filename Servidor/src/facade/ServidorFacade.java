@@ -362,10 +362,6 @@ public class ServidorFacade {
     
     /***************************** MÉTODOS PARA A COMUNICAÇÃO ********************************/
 
-    public ArrayList<Mensagem> getMensagens(){
-       // return clientes.getMensagens();
-       return null;
-    }
     
     public void iniciarClienteADM() throws IOException{                                       
         clientes.iniciarClienteADM();
@@ -377,5 +373,9 @@ public class ServidorFacade {
     
     public void iniciarClienteExibicao() throws IOException{
         clientes.iniciarClienteExibicao();
-    }        
+    }
+    
+    public Mensagem getMensagem(Solicitante id){
+        return clientes.getMensagem(id);
+    }
 }

@@ -14,7 +14,7 @@ public class ControladorDeClientes {
    private Mensagem mensagemADM;
    private Mensagem mensagemSensor;
    private Mensagem mensagemExibixao;
-   private ArrayList<Mensagem> mensagens;
+
 
     public ControladorDeClientes() {}
     
@@ -22,10 +22,6 @@ public class ControladorDeClientes {
         mensagemADM = new Mensagem(Solicitante.ClienteADM);
         mensagemSensor = new Mensagem(Solicitante.Sensor);
         mensagemExibixao = new Mensagem(Solicitante.ClienteExib);
-        
-        mensagens.add(mensagemADM);
-        mensagens.add(mensagemSensor);
-        mensagens.add(mensagemExibixao);
     }
     
     public void iniciarClienteADM() throws IOException{                                       
@@ -42,4 +38,22 @@ public class ControladorDeClientes {
         exibicao = new Conexao(Solicitante.ClienteExib);
         exibicao.rodar();
     }    
+    
+    public Mensagem getMensagem(Solicitante sol) {
+        
+        if(sol == Solicitante.ClienteADM){
+            return mensagemADM;
+        }
+        else if(sol == Solicitante.ClienteExib){
+            return mensagemExibixao;
+        }
+        else if(sol == Solicitante.Sensor){
+            return mensagemSensor;
+
+        }
+        
+        return null;
+    }
+
+    
 }

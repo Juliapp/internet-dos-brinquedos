@@ -21,14 +21,16 @@ public class ConectionIO implements Runnable{
 
     @Override
     public void run() {
-        try{
-            BufferedReader in = new BufferedReader( new InputStreamReader(socket.getInputStream(), "UTF8"));
-            System.out.println(in.readLine());
-            //socket.getInputStream();
+        while(true){
+            try{
+                BufferedReader in = new BufferedReader( new InputStreamReader(socket.getInputStream(), "UTF8"));
+                System.out.println(in.readLine());
+                //socket.getInputStream();
 
-            socket.getOutputStream();
-        }catch(IOException e){
+                socket.getOutputStream();
+            }catch(IOException e){}
         }
+        
     }
     
         public Mensagem buscarMensagem(){

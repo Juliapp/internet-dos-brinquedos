@@ -27,8 +27,6 @@ public class Servidor {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
     }
 
     private static void conectarClientes() throws IOException{

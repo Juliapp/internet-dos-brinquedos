@@ -29,7 +29,6 @@ public class Conexao{
         // io = new ConectionIO(socket, id);
         //Thread threadIO = new Thread(io);
         
-        //this.tratarConexao(socket);
     }
     
 
@@ -40,11 +39,15 @@ public class Conexao{
     
     private void criarServerSocket(int porta) throws IOException {
         //cria um serverSocket se tiver em só uma placa de rede
+        this.porta = porta;
         serverSocket = new ServerSocket(porta);
     }
    
+    public int getPorta(){
+        return porta;
+    }
     
-        private Socket esperandoConexao() throws IOException {
+    private Socket esperandoConexao() throws IOException {
         //Faz o serverSocket esperar uma conexão, só da o retorno quando a conexão não é estabelecida
         System.out.println("Esperando a resposta do cliente .....");
         System.out.println("Fique atento se precisar dar permição ao Firewall do seu Sistema Operacional");

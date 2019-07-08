@@ -1,10 +1,8 @@
 package facade;
 
-import comunicacao.Conexao;
 import comunicacao.Mensagem;
 import comunicacao.Solicitante;
 import java.util.ArrayList;
-import java.util.Date;
 import controladores.ControladorFactory;
 import controladores.ControladorCorrida;
 import controladores.ControladorDeClientes;
@@ -24,12 +22,11 @@ import model.Time;
 
 public class ServidorFacade {
 
-    private ArrayList<ControladorCorrida> contrCorrida;
-    private ControladorDeDados Dados;
-    private ControladorFactory cf;
+    private final ArrayList<ControladorCorrida> contrCorrida;
+    private final ControladorDeDados Dados;
+    private final ControladorFactory cf;
     private ControladorCorrida corridaAtual;
-    //fazer as modificações para o controlador de cliente aqui no facade
-    private ControladorDeClientes clientes;
+    private final ControladorDeClientes clientes;
     private static ServidorFacade facade;
 
     /**
@@ -377,5 +374,13 @@ public class ServidorFacade {
     
     public Mensagem getMensagem(Solicitante id){
         return clientes.getMensagem(id);
+    }
+    
+    public void novaMensagem(Solicitante id, byte[] bytes){
+        clientes.novaMensagem(id, bytes);
+    }
+    
+    public void tratarMensagem(byte[] bytes){
+        //entrar no tratamento da mensagem
     }
 }

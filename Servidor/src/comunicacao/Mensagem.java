@@ -1,8 +1,6 @@
 package comunicacao;
 
-import java.io.Serializable;
-
-public class Mensagem implements Serializable {
+public class Mensagem {
     private Solicitante solicitante;
     private boolean has;
     private byte[] bytes;
@@ -18,6 +16,10 @@ public class Mensagem implements Serializable {
 
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
+    }
+    
+    public void setHasMensagemToTrue(){
+        has = true;
     }
 
     public Solicitante getSolicitante() {

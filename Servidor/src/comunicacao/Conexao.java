@@ -1,19 +1,14 @@
 package comunicacao;
 
-import facade.ServidorFacade;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 
 public class Conexao{
     private ServerSocket serverSocket;
-    private Solicitante id;
+    private final Solicitante id;
     private int porta;
     private ConectionIO io;
 
@@ -24,11 +19,11 @@ public class Conexao{
     
     public void rodar() throws IOException {
         conectar();
-        //Socket socket = esperandoConexao();
+        Socket socket = esperandoConexao();
         
-        // io = new ConectionIO(socket, id);
-        //Thread threadIO = new Thread(io);
-        
+        io = new ConectionIO(socket, id);
+        Thread threadIO = new Thread(io);
+        threadIO.run();
     }
     
 
@@ -38,7 +33,6 @@ public class Conexao{
     }
     
     private void criarServerSocket(int porta) throws IOException {
-        //cria um serverSocket se tiver em só uma placa de rede
         this.porta = porta;
         serverSocket = new ServerSocket(porta);
     }

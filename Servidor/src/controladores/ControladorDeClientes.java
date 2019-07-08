@@ -49,10 +49,24 @@ public class ControladorDeClientes {
         }
         else if(sol == Solicitante.Sensor){
             return mensagemSensor;
-
         }
         
         return null;
+    }
+
+    public void novaMensagem(Solicitante id, byte[] bytes) {
+        if(id == Solicitante.ClienteADM){
+            mensagemADM.setBytes(bytes);
+            mensagemADM.setHasMensagemToTrue();
+        }
+        else if(id == Solicitante.ClienteExib){
+            mensagemExibixao.setBytes(bytes);
+            mensagemExibixao.setHasMensagemToTrue();
+        }
+        else if(id == Solicitante.Sensor){
+            mensagemSensor.setBytes(bytes);
+            mensagemSensor.setHasMensagemToTrue();
+        }    
     }
 
     

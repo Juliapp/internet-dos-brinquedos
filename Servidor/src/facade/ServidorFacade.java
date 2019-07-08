@@ -319,6 +319,7 @@ public class ServidorFacade {
      * @return Caso a corrida foi instanciada com sucesso
      */
     public boolean novaCorrida(int[] ids, int quantidadeDeVoltas) {
+        
         ControladorCorrida c = new ControladorCorrida(getJogadoresPorArrayDeID(ids), quantidadeDeVoltas);
         corridaAtual = c;
         contrCorrida.add(c);
@@ -376,7 +377,7 @@ public class ServidorFacade {
         return clientes.getMensagem(id);
     }
     
-    public void novaMensagem(Solicitante id, byte[] bytes){
+    public void novaMensagem(String id, byte[] bytes){
         clientes.novaMensagem(id, bytes);
     }
     

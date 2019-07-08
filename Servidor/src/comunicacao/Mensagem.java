@@ -6,6 +6,7 @@ public class Mensagem {
     private byte[] bytes;
 
     public Mensagem(Solicitante sol) {
+        has = false;
         this.solicitante = sol;
         has = false;
     }

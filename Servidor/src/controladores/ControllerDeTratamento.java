@@ -15,9 +15,14 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import execoes.PilotoNaoExisteException;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import model.Carro;
 import model.Jogador;
 import model.PreConfigCorrida;
 import model.TagColetada;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -25,7 +30,7 @@ import model.TagColetada;
  */
 public class ControllerDeTratamento extends Thread {
 
-    private ServidorFacade servidorFacade;
+    private ServidorFacade facade;
 
     private final ObjectOutputStream os;
     private final ObjectInputStream is;
@@ -37,13 +42,105 @@ public class ControllerDeTratamento extends Thread {
         this.recebido = s;
         this.os = os;
         this.is = is;
-        this.servidorFacade = ServidorFacade.getInstance();
+        this.facade = ServidorFacade.getInstance();
     }
 
     public boolean startCronometro() {
 
         this.status = true;
         return this.status;
+
+    }
+
+    public byte[] convertToByte(String string) {
+        return string.getBytes(StandardCharsets.UTF_8);
+    }
+
+    public String convertToString(byte[] dados) {
+        return new String(dados, StandardCharsets.UTF_8);
+    }
+
+    public void respostaCliente(String id, String resposta) {
+        byte[] bytes = convertToByte(resposta);
+        facade.novaMensagem(id, bytes);
+    }
+
+    public void tratamentoMensagem(byte[] bytes) throws PilotoNaoExisteException {
+
+        String info = new String(bytes, StandardCharsets.UTF_8);
+        JSONObject dados = new JSONObject(info);
+        switch (dados.getString("solicitante")) {
+            case "ClienteADM":
+                switch (dados.getString("command")) {
+                    case "CadCarro":
+                        if (facade.cadastrarCarro(dados.getString("tag"), dados.getString("cor"), dados.getString("equipe"))) {
+                            //responde a solicitação do cliente!
+                            respostaCliente(dados.getString("solicitante"), "Carro Cadastrado!");
+                            
+
+                        }
+                        break;
+                    case "CadPiloto":
+                        if (facade.cadastrarPiloto(dados.getString("nomePiloto"), null)) {
+                            //responde a solicitação do cliente!
+                            respostaCliente(dados.getString("solicitante"), "Piloto Cadastrado!");
+
+                        }
+                        break;
+                    case "CadJogador":
+                        if (facade.CadastrarJogador(dados.getInt("idCarro"), dados.getString("nomePiloto"))) {
+                            //responde a solicitação do cliente!
+                            respostaCliente(dados.getString("solicitante"), "Jogador Cadastrado!");
+                        }
+                        break;
+                    case "IterarCarros":
+                        Iterator<Carro> carros = facade.getListaDeCarros().iterator();
+                        JSONArray arrayCarros = new JSONArray();
+                        while (carros.hasNext()) {
+                            Carro carro = (Carro) carros.next();
+                            arrayCarros.put(carro);
+                        }
+
+                        JSONObject dadosCarros = new JSONObject();
+                        dadosCarros.put("arrayDeCarros", arrayCarros);
+                        //responde a solicitação do cliente, enviando o json com o array de Carros
+
+                        break;
+                    case "IterarJogadores":
+                        Iterator<Jogador> jogadores = facade.getListaDeJogadores().iterator();
+                        JSONArray arrayJogadores = new JSONArray();
+                        while (jogadores.hasNext()) {
+                            Jogador jogador = (Jogador) jogadores.next();
+                            arrayJogadores.put(jogador);
+                        }
+
+                        JSONObject dadosJogadores = new JSONObject();
+                        dadosJogadores.put("arrayDeCarros", arrayJogadores);
+
+                        break;
+                    case "PreConfigCorrida":
+                        JSONArray arrayIds = dados.getJSONArray("idsJogadores"); 
+                        int[] ids = new int[arrayIds.length()];
+                        
+                        for(int i = 0; i < arrayIds.length(); i++){
+                            ids[i] = arrayIds.optInt(i);
+                        }
+                        if(facade.novaCorrida(ids, dados.getInt("num_voltas"))){
+                            
+                        }
+                        break;
+                    case "ComecarCorrida":
+                        if(facade.comecarCorrida()){
+                            respostaCliente(dados.getString("solicitante"), "Corrida Iniciada, Tudo pronto!!!");
+                        }
+                        break;
+                    
+                }
+            case "ClienteExib":
+                break;
+            case "Sensor":
+                break;
+        }
 
     }
 
@@ -157,5 +254,5 @@ public class ControllerDeTratamento extends Thread {
         }
 
     }
-    */
+     */
 }

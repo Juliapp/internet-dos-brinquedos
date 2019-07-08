@@ -16,7 +16,9 @@ public class ControladorDeClientes {
    private Mensagem mensagemExibixao;
 
 
-    public ControladorDeClientes() {}
+    public ControladorDeClientes() {
+        iniciarObjMensagens();
+    }
     
     public void iniciarObjMensagens(){
         mensagemADM = new Mensagem(Solicitante.ClienteADM);
@@ -54,19 +56,23 @@ public class ControladorDeClientes {
         return null;
     }
 
-    public void novaMensagem(Solicitante id, byte[] bytes) {
-        if(id == Solicitante.ClienteADM){
-            mensagemADM.setBytes(bytes);
-            mensagemADM.setHasMensagemToTrue();
-        }
-        else if(id == Solicitante.ClienteExib){
-            mensagemExibixao.setBytes(bytes);
-            mensagemExibixao.setHasMensagemToTrue();
-        }
-        else if(id == Solicitante.Sensor){
-            mensagemSensor.setBytes(bytes);
-            mensagemSensor.setHasMensagemToTrue();
-        }    
+    public void novaMensagem(String id, byte[] bytes) {
+        if(null != id)switch (id) {
+           case "ClienteADM":
+               mensagemADM.setBytes(bytes);
+               mensagemADM.setHasMensagemToTrue();
+               break;
+           case "ClienteExib":
+               mensagemExibixao.setBytes(bytes);
+               mensagemExibixao.setHasMensagemToTrue();
+               break;
+           case "Sensor":
+               mensagemSensor.setBytes(bytes);
+               mensagemSensor.setHasMensagemToTrue();    
+               break;
+           default:
+               break;
+       }    
     }
 
     

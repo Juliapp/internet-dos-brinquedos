@@ -68,4 +68,6 @@ public class ConectionIO implements Runnable{
         socket.close();
     }
     
+    
+    
 }

@@ -8,19 +8,16 @@ import java.util.Scanner;
 
 public class Conexao{
     private Socket socket;
-    private final Solicitante id;
     private int porta;
     private ConectionIO io;
 
     
-    public Conexao(Solicitante id){
-        this.id = id;
-    }
+    
     
     public void rodar() throws IOException {
         conectar();
         
-        io = new ConectionIO(socket, id);
+        io = new ConectionIO(socket);
         Thread threadIO = new Thread(io);
         threadIO.run();
     }

@@ -4,39 +4,32 @@ import java.io.Serializable;
 
 public class Mensagem implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    private Solicitante solicitante;
-    private Command command;
-    private Object object;
+    private boolean has;
+    private byte[] bytes;
 
-    public Mensagem(Command command, Object object, Solicitante sol) {
-        this.command = command;
-        this.object = object;
-        this.solicitante = sol;
+    public Mensagem() {
+        has = false;
+        has = false;
     }
 
-    public Command getCommand() {
-        return command;
+    public byte[] getBytes() {
+        return bytes;
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
+    }
+    
+    public void setHasMensagemToTrue(){
+        has = true;
     }
 
-    public Object getObject() {
-        return object;
+    public boolean hasMensagem(){
+        return has;
     }
-
-    public void setObject(Object object) {
-        this.object = object;
-    }
-
-    public Solicitante getSolicitante() {
-        return solicitante;
-    }
-
-    public void setSolicitante(Solicitante solicitante) {
-        this.solicitante = solicitante;
+    
+    public void enviouMensagem(){
+        has = false;
     }
     
     

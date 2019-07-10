@@ -29,7 +29,6 @@ public class Conexao{
         
         io = new ConectionIO(socket, id, tratamento, mensagens);
         io.run();
-        System.out.println("aqui");
         //Thread threadIO = new Thread(io);
         //threadIO.run();
 

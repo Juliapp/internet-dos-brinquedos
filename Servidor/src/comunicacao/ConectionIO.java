@@ -3,19 +3,10 @@ package comunicacao;
 import controladores.ControladorDeMensagens;
 import controladores.ControllerDeTratamento;
 import execoes.PilotoNaoExisteException;
-import facade.ServidorFacade;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,39 +30,37 @@ public class ConectionIO implements Runnable{
     @Override
     public void run() {
         System.out.println("O cliente está rodando na porta: " + socket.getLocalPort());
+        OutputStream output = null;
+        InputStream input = null;
         
-        InputStreamReader inr;  
-        BufferedReader bfr;
-        
-        Writer ouw;
-        BufferedWriter bfw;
+        try {
+            output = socket.getOutputStream();
+            input = socket.getInputStream();  
+        } catch (IOException ex) {
+            Logger.getLogger(ConectionIO.class.getName()).log(Level.SEVERE, null, ex);
+        }    
 
         
         
-        while(true){
-            System.out.println("buzina");
-            try{
-                OutputStream output = socket.getOutputStream();
-                InputStream input = socket.getInputStream();
+        while(!Thread.currentThread().isInterrupted()){
+            try {
                 tratarOutput(output);
                 tratarInput(input);
-                
-            }catch(IOException e){
-                e.printStackTrace();
-            } catch (PilotoNaoExisteException ex) {
+                wait(10);
+            } catch (IOException | PilotoNaoExisteException | InterruptedException ex) {
                 Logger.getLogger(ConectionIO.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
+                
         }
     }
     
     private void tratarOutput(OutputStream output) throws IOException{
-        Writer ouw;
-        BufferedWriter bfw;
         
         if(mensagens.getMensagem(id).hasMensagem()){
             Mensagem mensagem = mensagens.getMensagem(id);
             byte[] bytes = mensagem.getBytes();
             output.write(bytes, 0, bytes.length);
+            output.flush();
             mensagens.getMensagem(id).enviouMensagem();
         }    
     }
@@ -84,19 +73,13 @@ public class ConectionIO implements Runnable{
     }
     
     private byte[] toByteArray(InputStream input) throws IOException{
-        DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-        byte[] dyn_data = new byte[64];
-        dataInputStream.readFully(dyn_data);
+        DataInputStream dataInputStream = new DataInputStream(input);
+        
+        byte buffer[] = new byte[dataInputStream.available()]; 
+        dataInputStream.readFully(buffer);
 
-        DataInputStream speedData = new DataInputStream(new ByteArrayInputStream(dyn_data));
-        System.out.println("speedData.available:" + speedData.available());
 
-        for ( int i = 0; i < speedData.available(); i++ ) { 
-        // exception deals catches EOF
-               byte ch = speedData.readByte();
-               System.out.print((char) ch + "(" + ch + ")");
-        }
-        return null;
+        return buffer;
     }
     
     public void fecharSocket(Socket socket) throws IOException{

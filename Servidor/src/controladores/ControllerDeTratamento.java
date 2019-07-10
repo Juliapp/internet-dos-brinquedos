@@ -31,8 +31,10 @@ import org.json.JSONObject;
 public class ControllerDeTratamento {
 
     private ServidorFacade facade;
+    private ControladorDeMensagens mensagem;
     
-    public ControllerDeTratamento(ServidorFacade facade){
+    public ControllerDeTratamento(ServidorFacade facade, ControladorDeMensagens mensagem){
+        this.mensagem = mensagem;
         this.facade = facade;
     }
 
@@ -46,10 +48,10 @@ public class ControllerDeTratamento {
 
     public void respostaCliente(String id, String resposta) {
         byte[] bytes = convertToByte(resposta);
-        facade.novaMensagem(id, bytes);
+        mensagem.novaMensagem(id, bytes);
     }
 
-    public void tratamentoMensagem(byte[] bytes) throws PilotoNaoExisteException {
+    public void tratarMensagem(byte[] bytes) throws PilotoNaoExisteException {
 
         String info = new String(bytes, StandardCharsets.UTF_8);
         JSONObject dados = new JSONObject(info);

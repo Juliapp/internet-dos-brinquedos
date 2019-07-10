@@ -1,19 +1,25 @@
 package comunicacao;
 
+import controladores.ControladorDeMensagens;
+import controladores.ControllerDeTratamento;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-
 
 public class Conexao{
     private ServerSocket serverSocket;
     private final Solicitante id;
     private int porta;
     private ConectionIO io;
+    private final int PORTA = 5555;
 
+    private ControllerDeTratamento tratamento;
+    private ControladorDeMensagens mensagens;
     
-    public Conexao(Solicitante id){
+    public Conexao(Solicitante id, ControllerDeTratamento tratamento, ControladorDeMensagens mensagens){
+        this.tratamento = tratamento;
+        this.mensagens = mensagens;
         this.id = id;
     }
     
@@ -21,9 +27,12 @@ public class Conexao{
         conectar();
         Socket socket = esperandoConexao();
         
-        io = new ConectionIO(socket, id);
-        Thread threadIO = new Thread(io);
-        threadIO.run();
+        io = new ConectionIO(socket, id, tratamento, mensagens);
+        io.run();
+        System.out.println("aqui");
+        //Thread threadIO = new Thread(io);
+        //threadIO.run();
+
     }
     
 
@@ -51,13 +60,15 @@ public class Conexao{
     }
     
     private void conectar() throws IOException{
-
+        
+        /*
         System.out.println("Qual a porta?");
         Scanner s = new Scanner(System.in);
         String sporta = s.nextLine();   
         int porta = Integer.parseInt(sporta);
-
-        criarServerSocket(porta);
+        */
+        
+        criarServerSocket(PORTA);
  
     }
     

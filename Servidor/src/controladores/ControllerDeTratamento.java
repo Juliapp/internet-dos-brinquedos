@@ -28,28 +28,12 @@ import org.json.JSONObject;
  *
  * @author Teeu Guima
  */
-public class ControllerDeTratamento extends Thread {
+public class ControllerDeTratamento {
 
     private ServidorFacade facade;
-
-    private final ObjectOutputStream os;
-    private final ObjectInputStream is;
-    private final Socket recebido;
-    private int i = 0;
-    private boolean status;
-
-    public ControllerDeTratamento(Socket s, ObjectOutputStream os, ObjectInputStream is) {
-        this.recebido = s;
-        this.os = os;
-        this.is = is;
-        this.facade = ServidorFacade.getInstance();
-    }
-
-    public boolean startCronometro() {
-
-        this.status = true;
-        return this.status;
-
+    
+    public ControllerDeTratamento(ServidorFacade facade){
+        this.facade = facade;
     }
 
     public byte[] convertToByte(String string) {
@@ -119,7 +103,7 @@ public class ControllerDeTratamento extends Thread {
 
                         break;
                     case "PreConfigCorrida":
-                        JSONArray arrayIds = dados.getJSONArray("idsJogadores"); 
+                        JSONArray arrayIds = dados.getJSONArray("ids_jogadores"); 
                         int[] ids = new int[arrayIds.length()];
                         
                         for(int i = 0; i < arrayIds.length(); i++){

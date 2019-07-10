@@ -7,6 +7,7 @@ import controladores.ControladorFactory;
 import controladores.ControladorCorrida;
 import controladores.ControladorDeClientes;
 import controladores.ControladorDeDados;
+import controladores.ControllerDeTratamento;
 import execoes.CorridaNaoIniciadaException;
 import execoes.PilotoNaoExisteException;
 import execoes.TagInvalidaException;
@@ -28,7 +29,7 @@ public class ServidorFacade {
     private ControladorCorrida corridaAtual;
     private final ControladorDeClientes clientes;
     private static ServidorFacade facade;
-
+    private ControllerDeTratamento tratamento;
     /**
      * Méodo construtor se inicializa instanciando cada um os controladores.
      * Essa classe é o que vai acessar todos os controladores e vai ser a classe
@@ -41,8 +42,8 @@ public class ServidorFacade {
         cf = new ControladorFactory();
         contrCorrida = new ArrayList<>();
         corridaAtual = new ControladorCorrida();
-        
         clientes = new ControladorDeClientes();
+        tratamento = new ControllerDeTratamento(this);
     }
     
     public static synchronized ServidorFacade getInstance(){
@@ -381,7 +382,7 @@ public class ServidorFacade {
         clientes.novaMensagem(id, bytes);
     }
     
-    public void tratarMensagem(byte[] bytes){
-        //entrar no tratamento da mensagem
+    public void tratarMensagem(byte[] bytes) throws PilotoNaoExisteException{
+        tratamento.tratamentoMensagem(bytes);
     }
 }

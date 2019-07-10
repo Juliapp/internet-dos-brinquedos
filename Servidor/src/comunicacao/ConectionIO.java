@@ -1,11 +1,14 @@
 package comunicacao;
    
+import execoes.PilotoNaoExisteException;
 import facade.ServidorFacade;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -31,7 +34,12 @@ public class ConectionIO implements Runnable{
                 tratarOutput(output);
                 tratarInput(input);
                 
-            }catch(IOException e){}
+            }catch(IOException e){
+                e.printStackTrace();
+            } 
+            catch (PilotoNaoExisteException ex) {
+                Logger.getLogger(ConectionIO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -44,7 +52,7 @@ public class ConectionIO implements Runnable{
         }    
     }
     
-    private void tratarInput(InputStream input) throws IOException{
+    private void tratarInput(InputStream input) throws IOException, PilotoNaoExisteException{
         byte[] bytes = toByteArray(input);
         if(bytes.length > 0){
             facade.tratarMensagem(bytes);

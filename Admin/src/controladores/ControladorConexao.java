@@ -6,6 +6,7 @@
 package controladores;
 
 import comunicacao.Mensagem;
+import facade.ClienteFacade;
 import teste.Solicitante;
 import java.io.IOException;
 import teste.Conexao;
@@ -17,15 +18,17 @@ import teste.Conexao;
 public class ControladorConexao {
 
     private Conexao servidor;
+    private ClienteFacade facade;
 
     private Mensagem mensagemServidor;
 
-    public ControladorConexao() {
+    public ControladorConexao(ClienteFacade facade) {
         this.mensagemServidor = new Mensagem();
+        this.facade = facade;
     }
 
     public void iniciarClienteADM() throws IOException {
-        servidor = new Conexao();
+        servidor = new Conexao(facade);
         servidor.rodar();
     }
 
@@ -34,5 +37,9 @@ public class ControladorConexao {
         mensagemServidor.setBytes(bytes);
         mensagemServidor.setHasMensagemToTrue();
 
+    }
+
+    public Mensagem getMensagem() {
+        return mensagemServidor;
     }
 }

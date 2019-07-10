@@ -1,5 +1,6 @@
 package teste;
 
+import facade.ClienteFacade;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,14 +11,17 @@ public class Conexao{
     private Socket socket;
     private int porta;
     private ConectionIO io;
+    private ClienteFacade facade;
 
     
-    
+    public Conexao(ClienteFacade facade){
+        this.facade = facade;
+    }
     
     public void rodar() throws IOException {
         conectar();
         
-        io = new ConectionIO(socket);
+        io = new ConectionIO(socket, facade);
         Thread threadIO = new Thread(io);
         threadIO.run();
     }
@@ -29,13 +33,13 @@ public class Conexao{
     }
     
     private void criarSocket(String host, int porta) throws IOException {
-        porta = porta;
+        this.porta = porta;
         socket = new Socket(host, porta);
     }
 
     private void criarSocket(int porta) throws IOException {
         String host = "127.0.0.1";
-        porta = porta;
+        this.porta = porta;
         socket = new Socket(host, porta);
     }
     public int getPorta(){
@@ -46,7 +50,6 @@ public class Conexao{
 private void conectar() throws IOException{
         boolean entrou = false;
 
-        do{
             System.out.println("O cliente vai rodar na mesma placa de rede? S/N");
             System.out.println("Você pode trocar a opção digitando a resposta errada.");
             Scanner s = new Scanner(System.in);
@@ -56,12 +59,9 @@ private void conectar() throws IOException{
                 System.out.println("Qual a porta?");
                 s = new Scanner(System.in);
                 String sporta = s.nextLine();   
-                int porta = Integer.parseInt(sporta);
+                int port = Integer.parseInt(sporta);
 
-                criarSocket(porta);
-
-                entrou = true;
-
+                criarSocket(port);
             }else if(resposta.equals("n") || resposta.equals("N")){
                 System.out.println("Qual o endereço?");
                 s = new Scanner(System.in);
@@ -70,16 +70,13 @@ private void conectar() throws IOException{
                 System.out.println("Qual a porta?");
                 s = new Scanner(System.in);
                 String sporta = s.nextLine();   
-                int porta = Integer.parseInt(sporta);	
+                int port = Integer.parseInt(sporta);	
 
-                criarSocket(endereco, porta);
-
-                entrou = true;
+                criarSocket(endereco, port);
             }else{
                 System.out.println("Resposta incorreta");
             }
             
-        }while(!entrou);
     }
     
 }

@@ -1,16 +1,15 @@
 package teste;
 
+import facade.ClienteFacade;
 import comunicacao.Command;
 import comunicacao.Mensagem;
 import controladores.ControladorConexao;
 import teste.Conexao;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Iterator;
 import model.Carro;
 import model.Jogador;
-import model.PreConfigCorrida;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import util.Console;
@@ -18,9 +17,9 @@ import util.Console;
 public class Admin {
 
     String opc = "N";
-    private ControladorConexao transm;
+    private static ClienteFacade facade;
     public Admin() {
-        this.transm = new ControladorConexao();
+        this.facade = new ClienteFacade();
     }
 
     private int voltarMenu(String opc) {
@@ -45,6 +44,12 @@ public class Admin {
         opc = Console.readInt();
         return opc;
     }
+    
+    public void testJSON(){
+        String dado = "{ \"tag\" : \"AS0293FHUSID\" , \"hora\" : 2 , \"minutos\" : 3 , \"segundos\" : 4 , \"milesimos\" : 5 }";
+        JSONObject convert = new JSONObject(dado);
+        System.out.println(convert.toString());
+    }
 
     public int cadastroCarros() throws IOException, ClassNotFoundException {
         String op;
@@ -67,7 +72,7 @@ public class Admin {
         String dados_carro = carro.toString();
         
         byte[] bytes = dados_carro.getBytes(StandardCharsets.UTF_8);
-        transm.novaMensagem(bytes);
+        facade.novaMensagem(bytes);
  
         System.out.println("Deseja cadastrar novamente? S/N");
         op = Console.readString();
@@ -98,7 +103,7 @@ public class Admin {
         String dados_piloto = piloto.toString();
         
         byte[] bytes = dados_piloto.getBytes(StandardCharsets.UTF_8);
-        transm.novaMensagem(bytes);
+        facade.novaMensagem(bytes);
         
         System.out.println("Informe o ID do carro desejado!");
         
@@ -114,7 +119,7 @@ public class Admin {
 
         String dados_Jogador = piloto.toString();
         byte[] bytesArray = dados_Jogador.getBytes(StandardCharsets.UTF_8);
-        transm.novaMensagem(bytesArray);
+        facade.novaMensagem(bytesArray);
          
         System.out.println("Deseja cadastrar novamente? S/N");
         op = Console.readString();
@@ -136,19 +141,26 @@ public class Admin {
         String quant = Console.readString();
         Integer QuantosVaoJogar = new Integer(quant);
 
-        int[] jogadores = new int[QuantosVaoJogar];
-
+        
+        JSONArray jogadores_participantes = new JSONArray();
+        
+       
        // percorreParticipantes();
         for (int count = 0; count < QuantosVaoJogar; count++) {
             System.out.println("Informe o ID do jogador que deseja cadastrar na corrida!");
             String aux = Console.readString();
-            jogadores[count] = Integer.parseInt(aux);
+            jogadores_participantes.put(Integer.parseInt(aux));
         }
-
-       // PreConfigCorrida preConfig = new PreConfigCorrida(voltas, jogadores);
-       // Mensagem mensagem = new Mensagem(Command.PreConfiguracaoCorrida, preConfig, comunicacao.Solicitante.ClienteCad);
-       // transm.enviaMensagem(mensagem);
-
+        
+        JSONObject dados = new JSONObject();
+        dados.put("ids_jogadores", jogadores_participantes);
+        dados.put("num_voltas", voltas);
+        
+        String inicia_partida = dados.toString();
+        
+        byte[] bytes = inicia_partida.getBytes();
+        facade.novaMensagem(bytes);
+        
         for (int count = 0; count <= 100; count++) {
             switch (count) {
                 case 0:
@@ -180,6 +192,7 @@ public class Admin {
             //Ta dando Erroooooo
             Admin admin = new Admin();
             admin.conectarCliente();
+           
             do {
 
                 int controle = admin.menuPrincipal();
@@ -212,8 +225,9 @@ public class Admin {
     private static void conectarCliente() throws IOException {
         System.out.println("----- Internet dos brinquedos -----");
         System.out.println("Vamos fazer a conexão com os clientes");
-        Conexao c = new Conexao();
+        Conexao c = new Conexao(facade);
         c.rodar();
+        System.out.println("Passou");
     }
 
 }

@@ -25,7 +25,6 @@ public class ThreadConections extends Thread{
         while(!Thread.currentThread().isInterrupted()){
             try {
                 adm.tratar();
-                System.out.println("passou");
                 //exib.tratar();
                 //sensor.tratar();
             } catch (IOException | PilotoNaoExisteException ex) {

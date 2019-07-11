@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,9 +37,10 @@ public class ConectionIO {
         return id;
     }
 
-    public void tratar() throws IOException, PilotoNaoExisteException {
+    public void tratar() throws IOException, PilotoNaoExisteException, InterruptedException {
         tratarOutput(output);
         tratarInput(input);
+        Thread.sleep(3000);
     }
     
     private void tratarOutput(OutputStream output) throws IOException{
@@ -57,6 +59,10 @@ public class ConectionIO {
         if(bytes.length > 0){
             tratamento.tratarMensagem(bytes);
         }
+        System.out.print(new String(bytes, StandardCharsets.UTF_8));
+        System.out.print(bytes.length + "       ");
+        System.out.println(bytes.toString() + "     ");
+        
     }
     
     private byte[] toByteArray(InputStream input) throws IOException{

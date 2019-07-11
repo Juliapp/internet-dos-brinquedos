@@ -54,6 +54,7 @@ public class ControllerDeTratamento {
     public void tratarMensagem(byte[] bytes) throws PilotoNaoExisteException {
 
         String info = new String(bytes, StandardCharsets.UTF_8);
+        System.out.println(info);
         JSONObject dados = new JSONObject(info);
         switch (dados.getString("solicitante")) {
             case "ClienteADM":
@@ -126,6 +127,9 @@ public class ControllerDeTratamento {
                 break;
             case "Sensor":
                 break;
+            default: 
+                    System.out.println("Argumento inválido");
+                
         }
 
     }

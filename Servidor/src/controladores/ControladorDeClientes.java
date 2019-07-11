@@ -1,5 +1,6 @@
 package controladores;
 
+import comunicacao.ConectionIO;
 import comunicacao.Conexao;
 import comunicacao.Mensagem;
 import comunicacao.Solicitante;
@@ -22,17 +23,29 @@ public class ControladorDeClientes {
     
     public void iniciarClienteADM() throws IOException{                                       
         adm = new Conexao(Solicitante.ClienteADM, tratamento, mensagens);
-        adm.rodar();
+        adm.iniciar();
     }
     
     public void iniciarClienteASensor() throws IOException{
         sensor = new Conexao(Solicitante.Sensor, tratamento, mensagens);
-        sensor.rodar();
+        sensor.iniciar();
     }
     
     public void iniciarClienteExibicao() throws IOException{
         exibicao = new Conexao(Solicitante.ClienteExib, tratamento, mensagens);
-        exibicao.rodar();
+        exibicao.iniciar();
+    }
+    
+    public ConectionIO getConectionIOADM(){
+        return adm.getConectionIO();
+    }
+    
+    public ConectionIO getConectionIOExib(){
+        return adm.getConectionIO();
+    }   
+    
+    public ConectionIO getConectionIOSensor(){
+        return adm.getConectionIO();
     }    
     
 }

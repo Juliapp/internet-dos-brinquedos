@@ -1,5 +1,6 @@
 package servidor;
 
+import comunicacao.ThreadConections;
 import controladores.ControllerDeTratamento;
 import facade.ServidorFacade;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 public class Servidor {
 
     private static ServidorFacade facade;
+    private static ThreadConections tcIO;
     
     public Servidor(){
         facade = ServidorFacade.getInstance();
@@ -23,6 +25,10 @@ public class Servidor {
         try {
             Servidor server = new Servidor();
             server.conectarClientes();
+            //iniciarThread();
+            tcIO = new ThreadConections(facade.getConectionIOADM());
+            new Thread(tcIO).start();
+            
         } catch (IOException ex) {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -33,6 +39,7 @@ public class Servidor {
         System.out.println("----- Internet dos brinquedos -----");
         System.out.println("Vamos fazer a conexão com os clientes");
         boolean adm = false, sensor = false, exibicao = false;
+        /*
         
         do{
             System.out.println("Qual dispositivo você quer conectar?");
@@ -65,6 +72,12 @@ public class Servidor {
                     default:  System.out.println("Resposta incorreta");       
             }        
         }while(!adm || !sensor || !exibicao);
+*/
+        facade.iniciarClienteADM();
+    }
+    
+    private static void iniciarThread(){
+        tcIO = new ThreadConections(facade.getConectionIOADM(), facade.getConectionIOExib(), facade.getConectionIOSensor());
     }
     private static void preSet() {
         ServidorFacade facade = ServidorFacade.getInstance();

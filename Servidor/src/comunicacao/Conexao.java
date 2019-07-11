@@ -23,14 +23,16 @@ public class Conexao{
         this.id = id;
     }
     
-    public void rodar() throws IOException {
+    public void iniciar() throws IOException {
         conectar();
         Socket socket = esperandoConexao();
         
         io = new ConectionIO(socket, id, tratamento, mensagens);
-        new Thread(io).start();
     }
     
+    public ConectionIO getConectionIO(){
+        return io;
+    }
 
     public ServerSocket getSocket(){
         return serverSocket;

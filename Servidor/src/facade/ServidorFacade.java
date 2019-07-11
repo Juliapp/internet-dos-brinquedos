@@ -1,5 +1,6 @@
 package facade;
 
+import comunicacao.ConectionIO;
 import comunicacao.Mensagem;
 import comunicacao.Solicitante;
 import java.util.ArrayList;
@@ -379,5 +380,17 @@ public class ServidorFacade {
     public void iniciarClienteExibicao() throws IOException{
         clientes.iniciarClienteExibicao();
     }
+
+    public ConectionIO getConectionIOADM(){
+        return clientes.getConectionIOADM();
+    }
+    
+    public ConectionIO getConectionIOExib(){
+        return clientes.getConectionIOExib();
+    }   
+    
+    public ConectionIO getConectionIOSensor(){
+        return clientes.getConectionIOSensor();
+    }       
     
 }

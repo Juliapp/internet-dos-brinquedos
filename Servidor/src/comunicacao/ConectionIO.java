@@ -13,47 +13,32 @@ import java.util.logging.Logger;
 
 
 
-public class ConectionIO implements Runnable{
+public class ConectionIO {
     //tratamento de mensagem e checagem de mensagem
     private ControllerDeTratamento tratamento;
     private ControladorDeMensagens mensagens;
     private Socket socket; 
     private Solicitante id;
+    private OutputStream output;
+    private InputStream input = null; 
     
-    public ConectionIO(Socket socket, Solicitante id, ControllerDeTratamento tratamento, ControladorDeMensagens mensagens){
+    public ConectionIO(Socket socket, Solicitante id, ControllerDeTratamento tratamento, ControladorDeMensagens mensagens) throws IOException{
         this.tratamento = tratamento;
         this.mensagens = mensagens;
         this.socket = socket;
         this.id = id;
         
-        OutputStream output = null;
-        InputStream input = null;        
+        output = socket.getOutputStream();
+        input = socket.getInputStream();       
+    }
+    
+    public Solicitante getSolicitante(){
+        return id;
     }
 
-    @Override
-    public void run() {
-        OutputStream output = null;
-        InputStream input = null;
-        
-        try {
-            output = socket.getOutputStream();
-            input = socket.getInputStream();  
-        } catch (IOException ex) {
-            Logger.getLogger(ConectionIO.class.getName()).log(Level.SEVERE, null, ex);
-        }    
-
-        
-        
-        while(!Thread.currentThread().isInterrupted()){
-            try {
-                tratarOutput(output);
-                tratarInput(input);
-                wait(10);
-            } catch (IOException | PilotoNaoExisteException | InterruptedException ex) {
-                Logger.getLogger(ConectionIO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                
-        }
+    public void tratar() throws IOException, PilotoNaoExisteException {
+        tratarOutput(output);
+        tratarInput(input);
     }
     
     private void tratarOutput(OutputStream output) throws IOException{

@@ -5,22 +5,12 @@
  */
 package controladores;
 
-import comunicacao.Mensagem;
 import facade.ServidorFacade;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import execoes.PilotoNaoExisteException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import model.Carro;
 import model.Jogador;
-import model.PreConfigCorrida;
-import model.TagColetada;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

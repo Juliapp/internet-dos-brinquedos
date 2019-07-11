@@ -1,14 +1,8 @@
 package servidor;
 
 import comunicacao.ThreadConections;
-import controladores.ControllerDeTratamento;
 import facade.ServidorFacade;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +10,9 @@ public class Servidor {
 
     private static ServidorFacade facade;
     private static ThreadConections tcIO;
+
+    
+    
     
     public Servidor(){
         facade = ServidorFacade.getInstance();

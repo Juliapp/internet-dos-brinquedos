@@ -1,8 +1,6 @@
 package facade;
 
 import comunicacao.ConectionIO;
-import comunicacao.Mensagem;
-import comunicacao.Solicitante;
 import java.util.ArrayList;
 import controladores.ControladorFactory;
 import controladores.ControladorCorrida;

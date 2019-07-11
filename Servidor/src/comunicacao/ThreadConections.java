@@ -25,9 +25,10 @@ public class ThreadConections extends Thread{
         while(!Thread.currentThread().isInterrupted()){
             try {
                 adm.tratar();
+
                 //exib.tratar();
                 //sensor.tratar();
-            } catch (IOException | PilotoNaoExisteException ex) {
+            } catch (IOException | PilotoNaoExisteException | InterruptedException ex) {
                 Logger.getLogger(ThreadConections.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

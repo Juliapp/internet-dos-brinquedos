@@ -22,10 +22,13 @@ public class ControllerDeTratamento {
 
     private ServidorFacade facade;
     private ControladorDeMensagens mensagem;
+    private boolean rodandoCorrida;
+    private String curTag;
     
     public ControllerDeTratamento(ServidorFacade facade, ControladorDeMensagens mensagem){
         this.mensagem = mensagem;
         this.facade = facade;
+        rodandoCorrida = facade.statusCorrAtual();
     }
 
     public byte[] convertToByte(String string) {
@@ -50,7 +53,7 @@ public class ControllerDeTratamento {
             case "ClienteADM":
                 switch (dados.getString("command")) {
                     case "CadCarro":
-                        if (facade.cadastrarCarro(dados.getString("tag"), dados.getString("cor"), dados.getString("equipe"))) {
+                        if (facade.cadastrarCarro(curTag, dados.getString("cor"), dados.getString("equipe"))) {
                             //responde a solicitação do cliente!
                             respostaCliente(dados.getString("solicitante"), "Carro Cadastrado!");
                             
@@ -116,6 +119,14 @@ public class ControllerDeTratamento {
             case "ClienteExib":
                 break;
             case "Sensor":
+                        if(rodandoCorrida){
+                            //manda as tags pra corrida
+                            //facade.coletorDeTags(new TagColetada(dados.getString("tag"), );
+                        }else{
+                            //pega a tag atual pra ser cadastrada
+                            curTag = dados.getString("tag");
+                        }
+                        
                 break;
             default: 
                     System.out.println("Argumento inválido");
@@ -124,115 +135,4 @@ public class ControllerDeTratamento {
 
     }
 
-    /*
-    @Override
-    public void run() {
-
-        try {
-
-            // Ask user what he wants 
-            Mensagem msg = (Mensagem) is.readObject();
-
-            switch (msg.getSolicitante()) {
-                case ClienteCad:
-                    switch (msg.getCommand()) {
-                        case CadCarro:
-                            String[] dadosCarro = (String[]) msg.getObject();
-
-                            //nessa parte ele tem que pegar do coletor
-                            if (servidorFacade.cadastrarCarro(dadosCarro[0], dadosCarro[1], dadosCarro[2])) {
-                                this.os.writeUTF("Carro Cadastrado");
-                                this.os.flush();
-                            }
-                            break;
-
-                        case IterarCarros:
-                            Object arrayCarros = (Object) servidorFacade.getListaDeCarros();
-                            if (arrayCarros != null) {
-                                this.os.writeObject(arrayCarros);
-                                this.os.flush();
-                            }
-                            break;
-                        case CadPiloto:
-                            String dadosPiloto = (String) msg.getObject();
-                            if (servidorFacade.cadastrarPiloto(dadosPiloto, null)) {
-                                this.os.writeUTF("Piloto Cadastrado");
-                                this.os.flush();
-                            }
-                            break;
-                        case CadJogador:
-                            String[] dadosJogador = (String[]) msg.getObject();
-                            int id = Integer.parseInt(dadosJogador[0]);
-                            if (servidorFacade.CadastrarJogador(id, dadosJogador[1])) {
-                                this.os.writeUTF("Jogador Cadastrado");
-                                this.os.flush();
-                            }
-                            break;
-                        case ComecarCorrida:
-                            if (servidorFacade.comecarCorrida()) {
-                                this.os.writeUTF("Tudo pronto...Foi dada a largada...Que vença o melhor!!!");
-                                this.os.flush();
-                            }
-
-                            break;
-                        case IterarJogadores:
-                            Object arrayJogadores = (Object) servidorFacade.getListaDeJogadores();
-                            if (arrayJogadores != null) {
-                                this.os.writeObject(arrayJogadores);
-                                this.os.flush();
-                            } else {
-                                String erroinfo = "Erro no array";
-                                this.os.writeObject(erroinfo);
-                                this.os.flush();
-                            }
-                            break;
-                        case PreConfiguracaoCorrida:
-                            if (msg.getObject() instanceof PreConfigCorrida) {
-                                PreConfigCorrida preCor = (PreConfigCorrida) msg.getObject();
-                                servidorFacade.novaCorrida(preCor.getIdDosJogadores(), preCor.getQuantidadeVoltas());
-                                this.os.writeUTF("Partida configurada!");
-                                this.os.flush();
-                            }
-                            break;
-                    }
-
-                    break;
-                case ClienteExib:
-                    break;
-                case Sensor:
-                    switch (msg.getCommand()) {
-                        case StatusCorrida:
-                            this.os.writeObject((Object) servidorFacade.statusCorrida());
-                            this.os.flush();
-                            //servidorFacade.coletorDeTags(tag, tempoColetado);
-                            break;
-
-                        case EnviarTags:
-                            boolean statusEnvio = true;
-                            TagColetada tag = (TagColetada) msg.getObject(); //Tag coletada com o tempo inserido!
-                            this.os.writeObject((Object) statusEnvio);
-                            this.os.flush();
-
-                            break;
-                    }
-
-                    break;
-            }
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (PilotoNaoExisteException ex) {
-            Logger.getLogger(ControllerDeTratamento.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
-
-            this.is.close();
-            this.os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-     */
 }

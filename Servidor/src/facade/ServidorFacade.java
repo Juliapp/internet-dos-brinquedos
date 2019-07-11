@@ -360,10 +360,13 @@ public class ServidorFacade {
      * @throws execoes.CorridaNaoIniciadaException
      * @throws execoes.VoltaInvalidaException
      */
-    public void coletorDeTags(TagColetada tag, Time voltaComputada) throws TagInvalidaException, CorridaNaoIniciadaException, VoltaInvalidaException {
-        corridaAtual.pushTag(tag, voltaComputada);
+    public void coletorDeTags(TagColetada tag) throws TagInvalidaException, CorridaNaoIniciadaException, VoltaInvalidaException {
+        corridaAtual.pushTag(tag);
     }
     
+    public boolean statusCorrAtual(){
+        return corridaAtual.getStatus();
+    }
     /***************************** MÉTODOS PARA A COMUNICAÇÃO ********************************/
 
     

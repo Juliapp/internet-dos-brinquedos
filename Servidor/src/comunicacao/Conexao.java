@@ -28,10 +28,7 @@ public class Conexao{
         Socket socket = esperandoConexao();
         
         io = new ConectionIO(socket, id, tratamento, mensagens);
-        io.run();
-        //Thread threadIO = new Thread(io);
-        //threadIO.run();
-
+        new Thread(io).start();
     }
     
 

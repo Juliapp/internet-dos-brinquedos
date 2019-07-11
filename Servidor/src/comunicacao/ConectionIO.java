@@ -25,11 +25,13 @@ public class ConectionIO implements Runnable{
         this.mensagens = mensagens;
         this.socket = socket;
         this.id = id;
+        
+        OutputStream output = null;
+        InputStream input = null;        
     }
 
     @Override
     public void run() {
-        System.out.println("O cliente está rodando na porta: " + socket.getLocalPort());
         OutputStream output = null;
         InputStream input = null;
         

@@ -5,19 +5,27 @@
  */
 package controladores;
 
+import execoes.CorridaNaoIniciadaException;
 import facade.ServidorFacade;
 import execoes.PilotoNaoExisteException;
+import execoes.TagInvalidaException;
+import execoes.VoltaInvalidaException;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Carro;
 import model.Jogador;
+import model.TagColetada;
+import model.Time;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- *
- * @author Teeu Guima
- */
 public class ControllerDeTratamento {
 
     private ServidorFacade facade;
@@ -120,8 +128,12 @@ public class ControllerDeTratamento {
                 break;
             case "Sensor":
                         if(rodandoCorrida){
-                            //manda as tags pra corrida
-                            //facade.coletorDeTags(new TagColetada(dados.getString("tag"), );
+                            //jogar as tags na corrida
+                            try {
+                                facade.coletorDeTags(new TagColetada(dados.getString("tag"), converterTempo(dados.getString("tempo"))));
+                            } catch (TagInvalidaException | CorridaNaoIniciadaException | VoltaInvalidaException | ParseException ex) {
+                                Logger.getLogger(ControllerDeTratamento.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }else{
                             //pega a tag atual pra ser cadastrada
                             curTag = dados.getString("tag");
@@ -135,4 +147,21 @@ public class ControllerDeTratamento {
 
     }
 
+    
+    public Time converterTempo(String tempo) throws ParseException{
+
+        SimpleDateFormat parseData = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss.SSSSSS"); 
+        Calendar c = GregorianCalendar.getInstance();
+        c.setTime(parseData.parse(tempo));
+        
+        return new Time(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
+                        c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
+    }
 }
+
+/*
+            end += strftime(end, timeEnd-end, "%Y-%m-%dT%H:%M:%S", localtime(&seconds));
+            end += snprintf(end, timeEnd-end, ".%06d", micros);   
+
+
+*/

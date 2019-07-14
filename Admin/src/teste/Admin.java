@@ -1,10 +1,8 @@
 package teste;
 
 import facade.ClienteFacade;
-import comunicacao.Command;
 import comunicacao.Mensagem;
-import controladores.ControladorConexao;
-import teste.Conexao;
+import comunicacao.ThreadConections;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
@@ -17,7 +15,9 @@ import util.Console;
 public class Admin {
 
     String opc = "N";
+    private static ThreadConections tcIO;
     private static ClienteFacade facade;
+
     public Admin() {
         this.facade = new ClienteFacade();
     }
@@ -44,14 +44,14 @@ public class Admin {
         opc = Console.readInt();
         return opc;
     }
-    
-    public void testJSON(){
+
+    public void testJSON() {
         String dado = "{ \"tag\" : \"AS0293FHUSID\" , \"hora\" : 2 , \"minutos\" : 3 , \"segundos\" : 4 , \"milesimos\" : 5 }";
         JSONObject convert = new JSONObject(dado);
         System.out.println(convert.toString());
     }
 
-    public int cadastroCarros() throws IOException, ClassNotFoundException {
+    public int cadastroCarros() throws IOException, ClassNotFoundException, InterruptedException {
         String op;
         System.out.println("Infome a tag do carro(ID)!");
         String tag = Console.readString();
@@ -66,14 +66,16 @@ public class Admin {
         carro.put("tag", tag);
         carro.put("cor", cor);
         carro.put("equipe", equipe);
-        carro.put("solicitante", "Admin");
+        carro.put("solicitante", "ClienteADM");
         carro.put("command", "CadCarro");
-        
+
         String dados_carro = carro.toString();
-        
+
         byte[] bytes = dados_carro.getBytes(StandardCharsets.UTF_8);
-        facade.novaMensagem(bytes);
- 
+        facade.novaMensagem(carro.getString("solicitante"), bytes);
+
+        System.out.println(facade.getRespostaJSON().getString("status"));
+
         System.out.println("Deseja cadastrar novamente? S/N");
         op = Console.readString();
         if (op.equals("S")) {
@@ -83,30 +85,47 @@ public class Admin {
         }
 
     }
-    
-    public void iteraCarros(){
-        //buscar o byte, converter em JSONArray e ler as informações
-    }
- 
 
-    public int cadastroJogadores() throws IOException, ClassNotFoundException {
+    public void iterarCarros() throws InterruptedException {
+        //buscar o byte, converter em JSONArray e ler as informações
+        JSONObject iterar = new JSONObject();
+
+        iterar.put("solicitante", "ClienteADM");
+        iterar.put("command", "IterarCarros");
+
+        String dados_carro = iterar.toString();
+
+        byte[] bytes = dados_carro.getBytes(StandardCharsets.UTF_8);
+        facade.novaMensagem(iterar.getString("solicitante"), bytes);
+
+        JSONArray array = facade.getRespostaJSON().getJSONArray("arrayDeCarros");
+
+        while (array.iterator().hasNext()) {
+            Carro c = (Carro) array.iterator().next();
+            System.out.println("Id: " + c.getId() + " Tag: " + c.getTag() + " Cor: " + c.getCor() + " Equipe: " + c.getEquipe().getNome());
+        }
+    }
+
+    public int cadastroJogadores() throws IOException, ClassNotFoundException, InterruptedException {
         String op;
 
         System.out.println("Informe o seu nome:");
         String nome = Console.readString();
         JSONObject piloto = new JSONObject();
 
-        piloto.put("nome", nome);
-        piloto.put("solicitante", "Admin");
+        piloto.put("nomePiloto", nome);
+        piloto.put("solicitante", "ClienteADM");
         piloto.put("command", "CadPiloto");
 
         String dados_piloto = piloto.toString();
-        
+
         byte[] bytes = dados_piloto.getBytes(StandardCharsets.UTF_8);
-        facade.novaMensagem(bytes);
-        
+        facade.novaMensagem(piloto.getString("solicitante"), bytes);
+
+        System.out.println(facade.getRespostaJSON().getString("status"));
+
+        iterarCarros();
         System.out.println("Informe o ID do carro desejado!");
-        
 
         String idCarro = Console.readString();
 
@@ -114,13 +133,14 @@ public class Admin {
 
         jogador.put("idCarro", idCarro);
         jogador.put("nome", nome);
-        jogador.put("command", Command.CadJogador);
-        jogador.put("solicitante", Solicitante.ClienteADM);
+        jogador.put("command", "CadJogador");
+        jogador.put("solicitante", "ClienteADM");
 
         String dados_Jogador = piloto.toString();
         byte[] bytesArray = dados_Jogador.getBytes(StandardCharsets.UTF_8);
-        facade.novaMensagem(bytesArray);
-         
+        facade.novaMensagem(jogador.getString("solicitante"), bytesArray);
+        System.out.println(facade.getRespostaJSON().getString("status"));
+
         System.out.println("Deseja cadastrar novamente? S/N");
         op = Console.readString();
         if (op.equals("S")) {
@@ -128,10 +148,29 @@ public class Admin {
         } else {
             return 0;
         }
-       
+
     }
 
-    public void iniciaPartida() throws IOException, ClassNotFoundException {
+    public void percorreParticipantes() throws InterruptedException {
+        JSONObject iterar = new JSONObject();
+
+        iterar.put("solicitante", "ClienteADM");
+        iterar.put("command", "IterarCarros");
+
+        String dados_carro = iterar.toString();
+
+        byte[] bytes = dados_carro.getBytes(StandardCharsets.UTF_8);
+        facade.novaMensagem(iterar.getString("solicitante"), bytes);
+
+        JSONArray array = facade.getRespostaJSON().getJSONArray("arrayDeJogadores");
+
+        while (array.iterator().hasNext()) {
+            Jogador j = (Jogador) array.iterator().next();
+            System.out.println(j.toString());
+        }
+    }
+
+    public void iniciaPartida() throws IOException, ClassNotFoundException, InterruptedException {
 
         String op;
         System.out.println("Quantas voltas deseja?");
@@ -141,26 +180,26 @@ public class Admin {
         String quant = Console.readString();
         Integer QuantosVaoJogar = new Integer(quant);
 
-        
         JSONArray jogadores_participantes = new JSONArray();
-        
-       
-       // percorreParticipantes();
+
+        percorreParticipantes();
         for (int count = 0; count < QuantosVaoJogar; count++) {
-            System.out.println("Informe o ID do jogador que deseja cadastrar na corrida!");
+            System.out.println("Informe o 'Id' do jogador que deseja cadastrar na corrida!");
             String aux = Console.readString();
             jogadores_participantes.put(Integer.parseInt(aux));
         }
-        
+
         JSONObject dados = new JSONObject();
         dados.put("ids_jogadores", jogadores_participantes);
         dados.put("num_voltas", voltas);
-        
+        dados.put("solicitante", "ClienteADM");
+        dados.put("command", "PreConfigCorrida");
+
         String inicia_partida = dados.toString();
-        
+
         byte[] bytes = inicia_partida.getBytes();
-        facade.novaMensagem(bytes);
-        
+        facade.novaMensagem(dados.getString("solicitante"), bytes);
+
         for (int count = 0; count <= 100; count++) {
             switch (count) {
                 case 0:
@@ -176,8 +215,12 @@ public class Admin {
                     System.out.println("Preparando as bandeiras de largada...");
                     break;
                 case 100:
-                   // Mensagem msg = new Mensagem(Command.ComecarCorrida, null, comunicacao.Solicitante.ClienteCad);
-                    //transm.enviaMensagem(msg);
+                    dados.put("command", "ComeçarCorrida");
+                    inicia_partida = dados.toString();
+
+                    bytes = inicia_partida.getBytes();
+                    facade.novaMensagem(dados.getString("solicitante"), bytes);
+                    System.out.println(facade.getRespostaJSON().getString("status"));
                     break;
             }
             System.out.println(".");
@@ -186,13 +229,15 @@ public class Admin {
 
     }
 
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException, InterruptedException {
         try {
             int repeat = 0;
             //Ta dando Erroooooo
             Admin admin = new Admin();
-            admin.conectarCliente();
-           
+            conectarClientes();
+            tcIO = new ThreadConections(facade.getConectionIOADM());
+            new Thread(tcIO).start();
+
             do {
 
                 int controle = admin.menuPrincipal();
@@ -218,16 +263,15 @@ public class Admin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       
 
     }
 
-    private static void conectarCliente() throws IOException {
+    private static void conectarClientes() throws IOException {
         System.out.println("----- Internet dos brinquedos -----");
-        System.out.println("Vamos fazer a conexão com os clientes");
-        Conexao c = new Conexao(facade);
-        c.rodar();
-        System.out.println("Passou");
+        System.out.println("Conexão do cliente Administrador");
+        boolean adm = false, sensor = false, exibicao = false;
+
+        facade.iniciarClienteADM();
     }
 
 }

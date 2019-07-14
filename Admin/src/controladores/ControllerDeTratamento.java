@@ -6,6 +6,7 @@
 package controladores;
 
 import comunicacao.Mensagem;
+import comunicacao.Solicitante;
 import facade.ClienteFacade;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,13 +28,15 @@ import org.json.JSONObject;
  *
  * @author Teeu Guima
  */
-public class ControllerDeTratamento extends Thread {
+public class ControllerDeTratamento{
 
     private ClienteFacade facade;
+    private Mensagem mensagem;
     
 
     public ControllerDeTratamento(ClienteFacade facade) {
         this.facade = facade;
+        mensagem = new Mensagem(Solicitante.ClienteADM);
     }
 
     public byte[] convertToByte(String string) {
@@ -43,11 +46,16 @@ public class ControllerDeTratamento extends Thread {
     public String convertToString(byte[] dados) {
         return new String(dados, StandardCharsets.UTF_8);
     }
+    
+    public void respostaServidor(JSONObject json){
+        mensagem.setHasMensagemToTrue();
+        mensagem.setJson(json);
+    }
 
-    public JSONObject tratamentoMensagem(byte[] bytes) throws PilotoNaoExisteException {
-         String retorno = new String(bytes, StandardCharsets.UTF_8);
-         JSONObject dados_retorno = new JSONObject(retorno);
-         return dados_retorno;    
+    public void tratamentoMensagem(byte[] bytes) throws PilotoNaoExisteException {
+         JSONObject dados_retorno = new JSONObject(convertToString(bytes));
+         
+         facade.setRespostaJSON(dados_retorno);
         /* 
          switch(dados_retorno.getString("command")){
              case "CadCarro":

@@ -126,7 +126,7 @@ public class Jogador implements Serializable {
 
     @Override
     public String toString() {
-        return "Jogador{ID = "+ id + " " + piloto + " " + carro + '}';
+        return "{Id: "+ id + " Nome: " + piloto + " Id-Carro: " + carro + '}';
     }
     
     

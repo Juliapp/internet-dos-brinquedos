@@ -1,14 +1,16 @@
 package comunicacao;
 
-import java.io.Serializable;
+import org.json.JSONObject;
 
-public class Mensagem implements Serializable {
-
+public class Mensagem {
+    private Solicitante solicitante;
     private boolean has;
     private byte[] bytes;
+    private JSONObject json;
 
-    public Mensagem() {
+    public Mensagem(Solicitante sol) {
         has = false;
+        this.solicitante = sol;
         has = false;
     }
 
@@ -24,12 +26,28 @@ public class Mensagem implements Serializable {
         has = true;
     }
 
+    public Solicitante getSolicitante() {
+        return solicitante;
+    }
+
+    public void setSolicitante(Solicitante solicitante) {
+        this.solicitante = solicitante;
+    }
+    
     public boolean hasMensagem(){
         return has;
     }
     
     public void enviouMensagem(){
         has = false;
+    }
+
+    public JSONObject getJson() {
+        return json;
+    }
+
+    public void setJson(JSONObject json) {
+        this.json = json;
     }
     
     

@@ -6,17 +6,14 @@ import java.util.Iterator;
 import execoes.TagInvalidaException;
 import execoes.VoltaInvalidaException;
 import model.Carro;
-import util.Cronometro;
 import model.Jogador;
 import model.TagColetada;
 import model.Time;
 
 public class ControladorCorrida {
     private ArrayList<Jogador> jogadores;
-    private String id;
     private int quantidadeDeVoltas;
     private Jogador jogadorDavoltaMaisRapida; 
-    private Cronometro cronometro;
     private boolean rodando;
     private boolean corridaConcluida;
     
@@ -36,34 +33,17 @@ public class ControladorCorrida {
     }
     
 
-    
- 
-    
-    /**
-     *Da o start no cronometro e permite os outros métodos para controlar a corrida serem manipulados
-     * @return 
-     */
     /*
-    public void comecarCorrida(){
-        //rodar o cronometro
-        cronometro.comecar();
       
         *******************************************
          LEMBRAR DE COLOCAR UM CONTADORZINHO PRA FAZER A CONTAGEM REGRESSIVA PRA A PARTIDA COMEÇAR
          COLOCAR MÚSIQUINHA DE START TAMBÉM É UMA OPÇÃO MUITO BEM-VINDA 
         *******************************************
         
-        if(!corridaConcluida){
-            rodando = true;
-            cronometro.start();
-        }
-    }
+    
   */
     
-    /**
-     *Da o start no cronometro e permite os outros métodos para controlar a corrida serem manipulados
-     * @return 
-     */
+
     public boolean iniciarCorrida(){
         return this.rodando = true;
     }
@@ -71,16 +51,7 @@ public class ControladorCorrida {
     public boolean getStatus(){
         return this.rodando;
     }
-    
-    /**
-     *força a parada da thread do cronometro e seta a corrida rodando para false
-     */
-    
-    public void pararCorrida(){
-        rodando = false;
-        cronometro.stop();
-    }
-    
+       
     private Jogador getJogadorPorTag(String tag){
         Carro c;
         Jogador jogador;
@@ -102,9 +73,10 @@ public class ControladorCorrida {
      * @throws execoes.VoltaInvalidaException caso a volta não foi instanciada ainda
      * @throws execoes.CorridaNaoIniciadaException
      */
-    public void pushTag(TagColetada tag, Time voltaComputada) throws TagInvalidaException, VoltaInvalidaException, CorridaNaoIniciadaException {
+    public void pushTag(TagColetada tag) throws TagInvalidaException, VoltaInvalidaException, CorridaNaoIniciadaException {
         if(rodando && !corridaConcluida){
             Jogador jogador = getJogadorPorTag(tag.getTag());
+            Time voltaComputada = tag.getTime();
 
             if(jogador != null){
 
@@ -182,14 +154,6 @@ public class ControladorCorrida {
     public Jogador getJogadorDavoltaMaisRapida() {
         return jogadorDavoltaMaisRapida;
     }
-
-    /**
-     *pega a referência do cronometro atual
-     * @return
-     */
-    public Cronometro getCronometro() {
-        return cronometro;
-    }
     
     /**
      *Anuncia que o jogador fez um Pit Stop
@@ -235,7 +199,7 @@ public class ControladorCorrida {
      */
     private void criterioDeParada(Jogador jogador, int posicao){
         if(jogador.getVolta() == quantidadeDeVoltas && posicao == jogadores.size() -1){
-            pararCorrida();
+            rodando = false;
             corridaConcluida = true;
         }
     }

@@ -9,7 +9,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="655.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cliente_exibicao.FXMLDocumentController">
     <children>
-      <TableView id="tabela" layoutX="149.0" layoutY="197.0" prefHeight="444.0" prefWidth="982.0">
+      <TableView id="tabela" layoutX="149.0" layoutY="197.0" prefHeight="417.0" prefWidth="982.0">
         <columns>
           <TableColumn id="posicao" prefWidth="58.0" text="POS" />
           <TableColumn id="cor" prefWidth="48.0" />

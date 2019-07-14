@@ -1,9 +1,7 @@
 package model;
 
-import java.io.Serializable;
 
-public class PreConfigCorrida implements Serializable {
-    private static final long serialVersionUID = 8L;
+public class PreConfigCorrida  {
     public int quantidadeVoltas;
     private int[] IdDosJogadores;
     

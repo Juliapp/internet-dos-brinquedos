@@ -1,14 +1,18 @@
-package comunicacao;
+package facade;
 
+import comunicacao.ConectionIO;
 import java.util.ArrayList;
-import java.util.Date;
 import controladores.ControladorFactory;
 import controladores.ControladorCorrida;
+import controladores.ControladorDeClientes;
 import controladores.ControladorDeDados;
+import controladores.ControladorDeMensagens;
+import controladores.ControllerDeTratamento;
 import execoes.CorridaNaoIniciadaException;
 import execoes.PilotoNaoExisteException;
 import execoes.TagInvalidaException;
 import execoes.VoltaInvalidaException;
+import java.io.IOException;
 import model.Carro;
 import model.Equipe;
 import model.Jogador;
@@ -19,12 +23,16 @@ import model.Time;
 
 public class ServidorFacade {
 
-    private ArrayList<ControladorCorrida> contrCorrida;
-    private ControladorDeDados Dados;
-    private ControladorFactory cf;
+    private final ArrayList<ControladorCorrida> contrCorrida;
+    private final ControladorDeDados Dados;
+    private final ControladorFactory cf;
     private ControladorCorrida corridaAtual;
+    private final ControladorDeClientes clientes;
+    private ControllerDeTratamento tratamento;
+    private ControladorDeMensagens mensagens;
+    
     private static ServidorFacade facade;
-
+    
     /**
      * Méodo construtor se inicializa instanciando cada um os controladores.
      * Essa classe é o que vai acessar todos os controladores e vai ser a classe
@@ -37,6 +45,10 @@ public class ServidorFacade {
         cf = new ControladorFactory();
         contrCorrida = new ArrayList<>();
         corridaAtual = new ControladorCorrida();
+        
+        mensagens = new ControladorDeMensagens();
+        tratamento = new ControllerDeTratamento(this, this.mensagens);
+        clientes = new ControladorDeClientes(this.tratamento, this.mensagens);
     }
     
     public static synchronized ServidorFacade getInstance(){
@@ -313,6 +325,7 @@ public class ServidorFacade {
      * @return Caso a corrida foi instanciada com sucesso
      */
     public boolean novaCorrida(int[] ids, int quantidadeDeVoltas) {
+        
         ControladorCorrida c = new ControladorCorrida(getJogadoresPorArrayDeID(ids), quantidadeDeVoltas);
         corridaAtual = c;
         contrCorrida.add(c);
@@ -347,8 +360,38 @@ public class ServidorFacade {
      * @throws execoes.CorridaNaoIniciadaException
      * @throws execoes.VoltaInvalidaException
      */
-    public void coletorDeTags(TagColetada tag, Time voltaComputada) throws TagInvalidaException, CorridaNaoIniciadaException, VoltaInvalidaException {
-        corridaAtual.pushTag(tag, voltaComputada);
+    public void coletorDeTags(TagColetada tag) throws TagInvalidaException, CorridaNaoIniciadaException, VoltaInvalidaException {
+        corridaAtual.pushTag(tag);
+    }
+    
+    public boolean statusCorrAtual(){
+        return corridaAtual.getStatus();
+    }
+    /***************************** MÉTODOS PARA A COMUNICAÇÃO ********************************/
+
+    
+    public void iniciarClienteADM() throws IOException{                                       
+        clientes.iniciarClienteADM();
+    }
+    
+    public void iniciarClienteASensor() throws IOException{
+        clientes.iniciarClienteASensor();
+    }
+    
+    public void iniciarClienteExibicao() throws IOException{
+        clientes.iniciarClienteExibicao();
     }
 
+    public ConectionIO getConectionIOADM(){
+        return clientes.getConectionIOADM();
+    }
+    
+    public ConectionIO getConectionIOExib(){
+        return clientes.getConectionIOExib();
+    }   
+    
+    public ConectionIO getConectionIOSensor(){
+        return clientes.getConectionIOSensor();
+    }       
+    
 }

@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import clienteCad.CadastroFacade.CadFacade;
+import facade.ClienteFacade;
 
 /**
  *
@@ -22,12 +22,12 @@ import clienteCad.CadastroFacade.CadFacade;
 public class TesteControladorDeDados {
     ControladorDeDados cdd;
     ControladorFactory ccf;
-    CadFacade sf;
+    ClienteFacade sf;
     public TesteControladorDeDados() {
         
         this.cdd = new ControladorDeDados();
         this.ccf = new ControladorFactory();
-        this.sf = new CadFacade();
+        this.sf = new ClienteFacade();
     }
     
     @BeforeClass

@@ -1,5 +1,5 @@
 package comunicacao;
 
 public enum Solicitante {
-    ClienteCad, ClienteExib, Sensor
+    ClienteADM, ClienteExib, Sensor
 }

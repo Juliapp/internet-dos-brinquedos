@@ -40,7 +40,7 @@ public class ConectionIO {
     public void tratar() throws IOException, PilotoNaoExisteException, InterruptedException {
         tratarOutput(output);
         tratarInput(input);
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
     
     private void tratarOutput(OutputStream output) throws IOException{
@@ -49,6 +49,7 @@ public class ConectionIO {
             Mensagem mensagem = mensagens.getMensagem(id);
             byte[] bytes = mensagem.getBytes();
             output.write(bytes, 0, bytes.length);
+            System.out.println("Enviou Mensagem");
             output.flush();
             mensagens.getMensagem(id).enviouMensagem();
         }    
@@ -59,9 +60,9 @@ public class ConectionIO {
         if(bytes.length > 0){
             tratamento.tratarMensagem(bytes);
         }
-        System.out.print(new String(bytes, StandardCharsets.UTF_8));
-        System.out.print(bytes.length + "       ");
-        System.out.println(bytes.toString() + "     ");
+       //System.out.print(new String(bytes, StandardCharsets.UTF_8));
+        System.out.print(bytes.length + "       " + "\n");
+        //System.out.println(bytes.toString() + "     ");
         
     }
     

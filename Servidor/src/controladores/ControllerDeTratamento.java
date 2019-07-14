@@ -47,8 +47,10 @@ public class ControllerDeTratamento {
         return new String(dados, StandardCharsets.UTF_8);
     }
 
-    public void respostaCliente(String id, String resposta) {
-        byte[] bytes = convertToByte(resposta);
+    public void respostaCliente(String id, JSONObject resposta) {
+        String info = resposta.toString();
+        byte[] bytes = convertToByte(info);
+        System.out.println(bytes.length);
         mensagem.novaMensagem(id, bytes);
     }
 
@@ -61,9 +63,11 @@ public class ControllerDeTratamento {
             case "ClienteADM":
                 switch (dados.getString("command")) {
                     case "CadCarro":
-                        if (facade.cadastrarCarro(curTag, dados.getString("cor"), dados.getString("equipe"))) {
+                        if (facade.cadastrarCarro(dados.getString("tag"), dados.getString("cor"), dados.getString("equipe"))) {
                             //responde a solicitação do cliente!
-                            respostaCliente(dados.getString("solicitante"), "Carro Cadastrado!");
+                            System.out.println("Carro Cadastrado!!!");
+                            dados.put("status", "Carro Cadastrado!");
+                            respostaCliente(dados.getString("solicitante"), dados);
                             
 
                         }
@@ -71,26 +75,30 @@ public class ControllerDeTratamento {
                     case "CadPiloto":
                         if (facade.cadastrarPiloto(dados.getString("nomePiloto"), null)) {
                             //responde a solicitação do cliente!
-                            respostaCliente(dados.getString("solicitante"), "Piloto Cadastrado!");
+                            dados.put("status", "Piloto Cadastrado!");
+                            respostaCliente(dados.getString("solicitante"), dados);
 
                         }
                         break;
                     case "CadJogador":
-                        if (facade.CadastrarJogador(dados.getInt("idCarro"), dados.getString("nomePiloto"))) {
+                        if (facade.CadastrarJogador(dados.getInt("idCarro"), dados.getString("nome"))) {
                             //responde a solicitação do cliente!
-                            respostaCliente(dados.getString("solicitante"), "Jogador Cadastrado!");
+                            dados.put("status", "Jogador Cadastrado!");
+                            respostaCliente(dados.getString("solicitante"), dados);
                         }
                         break;
                     case "IterarCarros":
                         Iterator<Carro> carros = facade.getListaDeCarros().iterator();
                         JSONArray arrayCarros = new JSONArray();
                         while (carros.hasNext()) {
+                            System.out.println("Repetindo...");
                             Carro carro = (Carro) carros.next();
                             arrayCarros.put(carro);
                         }
 
                         JSONObject dadosCarros = new JSONObject();
                         dadosCarros.put("arrayDeCarros", arrayCarros);
+                        respostaCliente(dados.getString("solicitante"), dadosCarros);
                         //responde a solicitação do cliente, enviando o json com o array de Carros
 
                         break;
@@ -104,7 +112,7 @@ public class ControllerDeTratamento {
 
                         JSONObject dadosJogadores = new JSONObject();
                         dadosJogadores.put("arrayDeCarros", arrayJogadores);
-
+                        respostaCliente(dados.getString("solicitante"), dadosJogadores);
                         break;
                     case "PreConfigCorrida":
                         JSONArray arrayIds = dados.getJSONArray("ids_jogadores"); 
@@ -117,9 +125,10 @@ public class ControllerDeTratamento {
                             
                         }
                         break;
-                    case "ComecarCorrida":
+                    case "ComeçarCorrida":
                         if(facade.comecarCorrida()){
-                            respostaCliente(dados.getString("solicitante"), "Corrida Iniciada, Tudo pronto!!!");
+                            dados.put("status", "Corrida Iniciada, Tudo pronto!!!");
+                            respostaCliente(dados.getString("solicitante"), dados);
                         }
                         break;
                     

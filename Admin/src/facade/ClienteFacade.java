@@ -47,11 +47,15 @@ public class ClienteFacade {
     }
     
     public void iniciarServidor() throws IOException{                                       
-        clientes.iniciarServidor();
+        clientes.iniciarClienteADM();
     }
     
      public ConectionIO getConectionIOADM(){
         return clientes.getConectionIOADM();
+    }
+     
+     public void iniciarClienteADM() throws IOException{                                       
+        clientes.iniciarClienteADM();
     }
 
 }

@@ -7,7 +7,7 @@ import comunicacao.Solicitante;
 import java.io.IOException;
 
 public class ControladorDeClientes {
-   private Conexao servidor;
+   private Conexao admin;
    
     private final ControllerDeTratamento tratamento;
     private final ControladorDeMensagens mensagens;
@@ -18,13 +18,13 @@ public class ControladorDeClientes {
     }
     
     
-    public void iniciarServidor() throws IOException{                                       
-        servidor = new Conexao(Solicitante.ClienteADM, tratamento, mensagens);
-        servidor.iniciar();
+    public void iniciarClienteADM() throws IOException{                                       
+        admin = new Conexao(Solicitante.ClienteADM, tratamento, mensagens);
+        admin.iniciar();
     }
     
     public ConectionIO getConectionIOADM(){
-        return servidor.getConectionIO();
+        return admin.getConectionIO();
     }
     
     

@@ -34,10 +34,11 @@ public class ControllerDeTratamento {
     private boolean rodandoCorrida;
     private String curTag;
     
-    public ControllerDeTratamento(ServidorFacade facade, ControladorDeMensagens mensagem){
+    public ControllerDeTratamento(ServidorFacade facade, ControladorDeMensagens mensagem, boolean rodandoCorrida){
+        this.rodandoCorrida = rodandoCorrida;
         this.mensagem = mensagem;
         this.facade = facade;
-        rodandoCorrida = facade.statusCorrAtual();
+        
     }
 
     public byte[] convertToByte(String string) {
@@ -145,6 +146,7 @@ public class ControllerDeTratamento {
             case "ClienteExib":
                 break;
             case "Sensor":
+                        
                         if(rodandoCorrida){
                             //jogar as tags na corrida
                             try {

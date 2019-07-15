@@ -46,7 +46,7 @@ public class ServidorFacade {
         corridaAtual = new ControladorCorrida();
         
         mensagens = new ControladorDeMensagens();
-        tratamento = new ControllerDeTratamento(this, this.mensagens);
+        tratamento = new ControllerDeTratamento(this, this.mensagens, statusCorrida());
         clientes = new ControladorDeClientes(this.tratamento, this.mensagens);
     }
     

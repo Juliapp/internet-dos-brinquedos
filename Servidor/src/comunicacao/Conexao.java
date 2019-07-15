@@ -5,6 +5,7 @@ import controladores.ControllerDeTratamento;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Conexao{
     private ServerSocket serverSocket;
@@ -12,7 +13,6 @@ public class Conexao{
     private int porta;
     private ConectionIO io;
     
-    private final int PORTA = 5555;
 
     private final ControllerDeTratamento tratamento;
     private final ControladorDeMensagens mensagens;
@@ -59,14 +59,14 @@ public class Conexao{
     
     private void conectar() throws IOException{
         
-        /*
+       
         System.out.println("Qual a porta?");
         Scanner s = new Scanner(System.in);
         String sporta = s.nextLine();   
         int porta = Integer.parseInt(sporta);
-        */
         
-        criarServerSocket(PORTA);
+        
+        criarServerSocket(porta);
  
     }
     

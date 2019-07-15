@@ -15,19 +15,14 @@ public class ThreadConections extends Thread{
         this.exib = exib;
         this.sensor = sensor;
     }
-    
-    public ThreadConections(ConectionIO adm){
-        this.adm = adm;
-    }
-    
+        
     @Override
     public void run() {
         while(!Thread.currentThread().isInterrupted()){
             try {
                 adm.tratar();
-
-                //exib.tratar();
-                //sensor.tratar();
+                exib.tratar();
+                sensor.tratar();
             } catch (IOException | PilotoNaoExisteException | InterruptedException ex) {
                 Logger.getLogger(ThreadConections.class.getName()).log(Level.SEVERE, null, ex);
             }

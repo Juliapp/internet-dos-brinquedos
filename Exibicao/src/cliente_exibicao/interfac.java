@@ -1,19 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package cliente_exibicao;
 
-/**
- *
- * @author nana-
- */
+import comunicacao.ThreadConections;
+import facade.FacadeExibicao;
+import java.io.IOException;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
 public class interfac extends javax.swing.JFrame {
+    public static JPanel painelFundo;
+    public static JTable tabela;
+    public static JScrollPane barraRolagem;
+    
+    public static FacadeExibicao facade;
+    private static ThreadConections tcIO;
+    
 
     /**
      * Creates new form interfac
      */
     public interfac() {
+        facade = FacadeExibicao.getInstance();
         initComponents();
     }
 
@@ -32,11 +39,11 @@ public class interfac extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 674, Short.MAX_VALUE)
+            .addGap(0, 730, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 339, Short.MAX_VALUE)
+            .addGap(0, 451, Short.MAX_VALUE)
         );
 
         pack();
@@ -45,7 +52,13 @@ public class interfac extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
+        facade = FacadeExibicao.getInstance();
+        interfac.conectarServidor();
+        tcIO = new ThreadConections(facade.getConectionIO());
+        new Thread(tcIO).start();   
+        
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -72,9 +85,31 @@ public class interfac extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new interfac().setVisible(true);
+                interfac i = new interfac();
+                     
+                i.setVisible(true);
             }
         });
+    }
+    
+    public static void conectarServidor() throws IOException {
+        facade.iniciarServidor();
+    }    
+    
+    public static void criarJanela(){
+        painelFundo = new JPanel();
+        String [] colunas = {"Pos", "Piloto", "Time", "voltas", "volta mais rápida"};
+        Object [][] dados = refatorar();
+        JTable tabela = new JTable(dados, colunas);
+        JScrollPane barraRolagem = new JScrollPane(tabela);
+        painelFundo.add(barraRolagem);
+        
+    }
+    
+    public static Object [][] refatorar(){
+        Object [][] dados;
+        return null;
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

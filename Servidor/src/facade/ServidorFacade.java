@@ -393,4 +393,8 @@ public class ServidorFacade {
         return clientes.getConectionIOSensor();
     }       
     
+    public ArrayList<Jogador> jogadoresDaCorridaAtual(){
+        return corridaAtual.getJogadoresDaCorridaAtual();
+    }
+    
 }

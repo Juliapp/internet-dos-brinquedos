@@ -21,11 +21,15 @@ public class ControllerDeTratamento{
     }
 
     public void tratarMensagem(byte[] bytes) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        convertToString(bytes);
+        
     }
     
     
     
+    public void print(){
+        
+    }
     
     
 }

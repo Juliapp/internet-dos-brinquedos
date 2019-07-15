@@ -150,7 +150,7 @@ public class ControllerDeTratamento {
                             try {
                                 facade.coletorDeTags(new TagColetada(dados.getString("tag"), converterTempo(dados.getString("tempo"))));
                                 //Mandar mensagem pra o cliente de exibição
-                                mensagem.novaMensagem("ClienteExib", tabelaExibicao());
+                                tabelaExibicao();
                             } catch (TagInvalidaException | CorridaNaoIniciadaException | VoltaInvalidaException | ParseException ex) {
                                 Logger.getLogger(ControllerDeTratamento.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -178,9 +178,15 @@ public class ControllerDeTratamento {
                         c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
     }
     
-    public byte[] tabelaExibicao(){
+    public void tabelaExibicao(){
         ArrayList <Jogador> jogadores = facade.jogadoresDaCorridaAtual();
-        return null;
-        
+        JSONArray arrayJogadores = new JSONArray();
+        while(jogadores.iterator().hasNext()){
+            Jogador j = jogadores.iterator().next();
+            arrayJogadores.put(j.toString());
+        }
+        JSONObject dados = new JSONObject();
+        dados.put("arrayDeJogadores", arrayJogadores);
+        respostaCliente("ClienteExib", dados);
     }
 }

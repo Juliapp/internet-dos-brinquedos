@@ -6,10 +6,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ThreadConections extends Thread{
-    ConectionIO adm;
+    ConectionIO servidor;
 
-    public ThreadConections(ConectionIO adm) {
-        this.adm = adm;
+    public ThreadConections(ConectionIO servidor) {
+        this.servidor = servidor;
     }
     
     
@@ -17,10 +17,7 @@ public class ThreadConections extends Thread{
     public void run() {
         while(!Thread.currentThread().isInterrupted()){
             try {
-                adm.tratar();
-
-                //exib.tratar();
-                //sensor.tratar();
+                servidor.tratar();
             } catch (IOException | PilotoNaoExisteException | InterruptedException ex) {
                 Logger.getLogger(ThreadConections.class.getName()).log(Level.SEVERE, null, ex);
             }

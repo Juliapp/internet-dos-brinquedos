@@ -4,22 +4,20 @@ import comunicacao.Mensagem;
 import comunicacao.Solicitante;
 
 public class ControladorDeMensagens {
-    private Mensagem mensagemADM;
-    private Mensagem mensagemSensor;
-    private Mensagem mensagemExibixao;
+    private Mensagem mensagemServidor;
    
     public ControladorDeMensagens(){
         iniciarObjMensagens();
     }
     public void iniciarObjMensagens(){
-        mensagemADM = new Mensagem(Solicitante.ClienteADM);
+        mensagemServidor = new Mensagem(Solicitante.ClienteADM);
     }
    
     public void novaMensagem(String id, byte[] bytes) {
         if(null != id)switch (id) {
            case "ClienteADM":
-               mensagemADM.setBytes(bytes);
-               mensagemADM.setHasMensagemToTrue();
+               mensagemServidor.setBytes(bytes);
+               mensagemServidor.setHasMensagemToTrue();
                break;
            default:
                break;
@@ -29,7 +27,7 @@ public class ControladorDeMensagens {
     public Mensagem getMensagem(Solicitante sol) {
         
         if(sol == Solicitante.ClienteADM){
-            return mensagemADM;
+            return mensagemServidor;
         }
         return null;
     }

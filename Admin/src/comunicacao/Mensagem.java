@@ -11,7 +11,6 @@ public class Mensagem {
     public Mensagem(Solicitante sol) {
         has = false;
         this.solicitante = sol;
-        has = false;
     }
 
     public byte[] getBytes() {

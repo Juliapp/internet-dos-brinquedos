@@ -46,8 +46,8 @@ public class ClienteFacade {
         this.respostaJSON = json;
     }
     
-    public void iniciarClienteADM() throws IOException{                                       
-        clientes.iniciarClienteADM();
+    public void iniciarServidor() throws IOException{                                       
+        clientes.iniciarServidor();
     }
     
      public ConectionIO getConectionIOADM(){

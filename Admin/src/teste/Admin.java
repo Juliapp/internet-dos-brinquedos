@@ -1,11 +1,9 @@
 package teste;
 
 import facade.ClienteFacade;
-import comunicacao.Mensagem;
 import comunicacao.ThreadConections;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import model.Carro;
 import model.Jogador;
 import org.json.JSONArray;
@@ -19,7 +17,7 @@ public class Admin {
     private static ClienteFacade facade;
 
     public Admin() {
-        this.facade = new ClienteFacade();
+        Admin.facade = new ClienteFacade();
     }
 
     private int voltarMenu(String opc) {
@@ -232,9 +230,8 @@ public class Admin {
     public static void main(String[] args) throws ClassNotFoundException, InterruptedException {
         try {
             int repeat = 0;
-            //Ta dando Erroooooo
             Admin admin = new Admin();
-            conectarClientes();
+            conectarServidor();
             tcIO = new ThreadConections(facade.getConectionIOADM());
             new Thread(tcIO).start();
 
@@ -266,12 +263,11 @@ public class Admin {
 
     }
 
-    private static void conectarClientes() throws IOException {
+    private static void conectarServidor() throws IOException {
         System.out.println("----- Internet dos brinquedos -----");
-        System.out.println("Conexão do cliente Administrador");
-        boolean adm = false, sensor = false, exibicao = false;
+        System.out.println("Conexão com o Servidor");
 
-        facade.iniciarClienteADM();
+        facade.iniciarServidor();
     }
 
 }

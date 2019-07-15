@@ -24,7 +24,7 @@ public class Admin {
 
     private int voltarMenu(String opc) {
         this.opc = opc;
-        if (opc.equals('S')) {
+        if (opc.equals("S") | opc.equals("s")) {
             return 1;
         } else {
             return -1;
@@ -75,7 +75,7 @@ public class Admin {
 
         System.out.println("Deseja cadastrar novamente? S/N");
         op = Console.readString();
-        if (op.equals("S")) {
+        if (op.equals("S") | op.equals("s")) {
             return 1;
         } else {
             return 0;
@@ -142,7 +142,7 @@ public class Admin {
 
         System.out.println("Deseja cadastrar novamente? S/N");
         op = Console.readString();
-        if (op.equals("S")) {
+        if (op.equals("S") | op.equals("s")) {
             return 1;
         } else {
             return 0;

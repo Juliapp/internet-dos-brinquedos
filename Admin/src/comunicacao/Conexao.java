@@ -51,7 +51,7 @@ public class Conexao{
         return porta;
     }
     
-    private void conectarH() throws IOException{
+    private void conectar() throws IOException{
         boolean entrou = false;
 
         do{
@@ -90,20 +90,7 @@ public class Conexao{
         }while(!entrou);
     }
     
-    private void conectar() throws IOException{
-        
-        
-        
-        /*
-        System.out.println("Qual a porta?");
-        Scanner s = new Scanner(System.in);
-        String sporta = s.nextLine();   
-        int porta = Integer.parseInt(sporta);
-        */
-        
-        criarSocket(PORTA);
- 
-    }
+    
     
 }
 

@@ -42,7 +42,7 @@ public class ConectionIO {
         if(mensagens.getMensagem(id).hasMensagem()){
             Mensagem mensagem = mensagens.getMensagem(id);
             byte[] bytes = mensagem.getBytes();
-            System.out.println(bytes.length);
+            //System.out.println(bytes.length);
             output.write(bytes, 0, bytes.length);
             output.flush();
             mensagens.getMensagem(id).enviouMensagem();

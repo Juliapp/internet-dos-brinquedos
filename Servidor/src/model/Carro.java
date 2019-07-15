@@ -72,7 +72,7 @@ public class Carro implements Serializable {
 
     @Override
     public String toString() {
-        return '{' + "tag:" + getTag() + ", cor:" + getCor() + ", equipe:" + getEquipe() + '}';
+        return '{'+"Id: "+ getId() + " Tag: " + getTag() + ", Cor: " + getCor() + ", Equipe: " + getEquipe().getNome() + '}';
     }
     
     

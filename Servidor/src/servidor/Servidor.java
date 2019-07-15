@@ -22,6 +22,7 @@ public class Servidor {
         try {
             Servidor server = new Servidor();
             server.conectarClientes();
+            preSet();
             //iniciarThread();
             tcIO = new ThreadConections(facade.getConectionIOADM());
             new Thread(tcIO).start();

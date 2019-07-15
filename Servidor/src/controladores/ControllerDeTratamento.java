@@ -62,9 +62,8 @@ public class ControllerDeTratamento {
             case "ClienteADM":
                 switch (dados.getString("command")) {
                     case "CadCarro":
-                        if (facade.cadastrarCarro(dados.getString("tag"), dados.getString("cor"), dados.getString("equipe"))) {
+                        if (facade.cadastrarCarro(curTag, dados.getString("cor"), dados.getString("equipe"))) {
                             //responde a solicitação do cliente!
-                            System.out.println("Carro Cadastrado!!!");
                             dados.put("status", "Carro Cadastrado!");
                             respostaCliente(dados.getString("solicitante"), dados);
                         }
@@ -93,7 +92,8 @@ public class ControllerDeTratamento {
                         while (carros.hasNext()) {
                             System.out.println("Repetindo...");
                             Carro carro = (Carro) carros.next();
-                            arrayCarros.put(carro);
+                            arrayCarros.put(carro.toString());
+                            System.out.println("Enviou!!!");
                         }
 
                         JSONObject dadosCarros = new JSONObject();
@@ -107,12 +107,17 @@ public class ControllerDeTratamento {
                         JSONArray arrayJogadores = new JSONArray();
                         while (jogadores.hasNext()) {
                             Jogador jogador = (Jogador) jogadores.next();
-                            arrayJogadores.put(jogador);
+                            arrayJogadores.put(jogador.toString());
                         }
 
                         JSONObject dadosJogadores = new JSONObject();
-                        dadosJogadores.put("arrayDeCarros", arrayJogadores);
+                        dadosJogadores.put("arrayDeJogadores", arrayJogadores);
                         respostaCliente(dados.getString("solicitante"), dadosJogadores);
+                        break;
+                        
+                    case "EtapaClassificacao":
+                        
+                        
                         break;
                         
                     case "PreConfigCorrida":

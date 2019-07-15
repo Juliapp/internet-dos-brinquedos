@@ -14,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -68,10 +67,9 @@ public class ControllerDeTratamento {
                             System.out.println("Carro Cadastrado!!!");
                             dados.put("status", "Carro Cadastrado!");
                             respostaCliente(dados.getString("solicitante"), dados);
-                            
-
                         }
                         break;
+                        
                     case "CadPiloto":
                         if (facade.cadastrarPiloto(dados.getString("nomePiloto"), null)) {
                             //responde a solicitação do cliente!
@@ -80,6 +78,7 @@ public class ControllerDeTratamento {
 
                         }
                         break;
+                        
                     case "CadJogador":
                         if (facade.CadastrarJogador(dados.getInt("idCarro"), dados.getString("nome"))) {
                             //responde a solicitação do cliente!
@@ -87,6 +86,7 @@ public class ControllerDeTratamento {
                             respostaCliente(dados.getString("solicitante"), dados);
                         }
                         break;
+                        
                     case "IterarCarros":
                         Iterator<Carro> carros = facade.getListaDeCarros().iterator();
                         JSONArray arrayCarros = new JSONArray();
@@ -100,8 +100,8 @@ public class ControllerDeTratamento {
                         dadosCarros.put("arrayDeCarros", arrayCarros);
                         respostaCliente(dados.getString("solicitante"), dadosCarros);
                         //responde a solicitação do cliente, enviando o json com o array de Carros
-
                         break;
+                        
                     case "IterarJogadores":
                         Iterator<Jogador> jogadores = facade.getListaDeJogadores().iterator();
                         JSONArray arrayJogadores = new JSONArray();
@@ -114,6 +114,7 @@ public class ControllerDeTratamento {
                         dadosJogadores.put("arrayDeCarros", arrayJogadores);
                         respostaCliente(dados.getString("solicitante"), dadosJogadores);
                         break;
+                        
                     case "PreConfigCorrida":
                         JSONArray arrayIds = dados.getJSONArray("ids_jogadores"); 
                         int[] ids = new int[arrayIds.length()];
@@ -125,6 +126,7 @@ public class ControllerDeTratamento {
                             
                         }
                         break;
+                        
                     case "ComeçarCorrida":
                         if(facade.comecarCorrida()){
                             dados.put("status", "Corrida Iniciada, Tudo pronto!!!");
@@ -147,8 +149,8 @@ public class ControllerDeTratamento {
                             //pega a tag atual pra ser cadastrada
                             curTag = dados.getString("tag");
                         }
-                        
                 break;
+                
             default: 
                     System.out.println("Argumento inválido");
                 
@@ -167,10 +169,3 @@ public class ControllerDeTratamento {
                         c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
     }
 }
-
-/*
-            end += strftime(end, timeEnd-end, "%Y-%m-%dT%H:%M:%S", localtime(&seconds));
-            end += snprintf(end, timeEnd-end, ".%06d", micros);   
-
-
-*/

@@ -39,7 +39,7 @@ public class Servidor {
         /*
         
         do{
-            System.out.println("Qual dispositivo você quer conectar?");
+            System.out.println("Qual cliente você quer conectar?");
             if(!adm){
                 System.out.println("1 - Cliente ADM");
             }

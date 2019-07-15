@@ -38,14 +38,15 @@ public class ControladorDeMensagens {
 
     public Mensagem getMensagem(Solicitante sol) {
         
-        if(sol == Solicitante.ClienteADM){
-            return mensagemADM;
-        }
-        else if(sol == Solicitante.ClienteExib){
-            return mensagemExibixao;
-        }
-        else if(sol == Solicitante.Sensor){
-            return mensagemSensor;
+        if(null != sol)switch (sol) {
+            case ClienteADM:
+                return mensagemADM;
+            case ClienteExib:
+                return mensagemExibixao;
+            case Sensor:
+                return mensagemSensor;
+            default:
+                break;
         }
         
         return null;

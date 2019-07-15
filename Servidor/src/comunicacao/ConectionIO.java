@@ -8,25 +8,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 
 public class ConectionIO {
     //tratamento de mensagem e checagem de mensagem
-    private ControllerDeTratamento tratamento;
-    private ControladorDeMensagens mensagens;
-    private Socket socket; 
-    private Solicitante id;
-    private OutputStream output;
+    private final ControllerDeTratamento tratamento;
+    private final ControladorDeMensagens mensagens;
+    private final Solicitante id;
+    private final OutputStream output;
     private InputStream input = null; 
     
     public ConectionIO(Socket socket, Solicitante id, ControllerDeTratamento tratamento, ControladorDeMensagens mensagens) throws IOException{
         this.tratamento = tratamento;
         this.mensagens = mensagens;
-        this.socket = socket;
         this.id = id;
         
         output = socket.getOutputStream();
@@ -40,7 +35,6 @@ public class ConectionIO {
     public void tratar() throws IOException, PilotoNaoExisteException, InterruptedException {
         tratarOutput(output);
         tratarInput(input);
-        Thread.sleep(2000);
     }
     
     private void tratarOutput(OutputStream output) throws IOException{
@@ -49,7 +43,6 @@ public class ConectionIO {
             Mensagem mensagem = mensagens.getMensagem(id);
             byte[] bytes = mensagem.getBytes();
             output.write(bytes, 0, bytes.length);
-            System.out.println("Enviou Mensagem");
             output.flush();
             mensagens.getMensagem(id).enviouMensagem();
         }    
@@ -60,10 +53,7 @@ public class ConectionIO {
         if(bytes.length > 0){
             tratamento.tratarMensagem(bytes);
         }
-       //System.out.print(new String(bytes, StandardCharsets.UTF_8));
-        System.out.print(bytes.length + "       " + "\n");
-        //System.out.println(bytes.toString() + "     ");
-        
+        System.out.print(bytes.length + "       " + "\n");        
     }
     
     private byte[] toByteArray(InputStream input) throws IOException{
@@ -71,7 +61,6 @@ public class ConectionIO {
         
         byte buffer[] = new byte[dataInputStream.available()]; 
         dataInputStream.readFully(buffer);
-
 
         return buffer;
     }

@@ -29,14 +29,14 @@ public class ControladorCorrida {
         corridaConcluida = false;
     }
 
-    public ControladorCorrida() {
-    }
+    public ControladorCorrida() {}
     
 
     /*
       
         *******************************************
          LEMBRAR DE COLOCAR UM CONTADORZINHO PRA FAZER A CONTAGEM REGRESSIVA PRA A PARTIDA COMEÇAR
+    
          COLOCAR MÚSIQUINHA DE START TAMBÉM É UMA OPÇÃO MUITO BEM-VINDA 
         *******************************************
         
@@ -68,7 +68,6 @@ public class ControladorCorrida {
     /**
      *Tratamento da tag para ser validada e introduzida na corrida
      * @param tag tag coletada do sensor
-     * @param voltaComputada objeto Time coletado pelo sensor
      * @throws TagInvalidaException caso a tag não foi cadastrada no sistema ou na partida atual
      * @throws execoes.VoltaInvalidaException caso a volta não foi instanciada ainda
      * @throws execoes.CorridaNaoIniciadaException
@@ -201,6 +200,7 @@ public class ControladorCorrida {
         if(jogador.getVolta() == quantidadeDeVoltas && posicao == jogadores.size() -1){
             rodando = false;
             corridaConcluida = true;
+            System.out.println("Fim da corrida!!!!!!!");
         }
     }
     

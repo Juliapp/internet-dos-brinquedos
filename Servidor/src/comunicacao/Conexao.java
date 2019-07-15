@@ -5,17 +5,17 @@ import controladores.ControllerDeTratamento;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Conexao{
     private ServerSocket serverSocket;
     private final Solicitante id;
     private int porta;
     private ConectionIO io;
+    
     private final int PORTA = 5555;
 
-    private ControllerDeTratamento tratamento;
-    private ControladorDeMensagens mensagens;
+    private final ControllerDeTratamento tratamento;
+    private final ControladorDeMensagens mensagens;
     
     public Conexao(Solicitante id, ControllerDeTratamento tratamento, ControladorDeMensagens mensagens){
         this.tratamento = tratamento;

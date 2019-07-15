@@ -18,7 +18,6 @@ import model.Equipe;
 import model.Jogador;
 import model.Piloto;
 import model.TagColetada;
-import model.Time;
 
 
 public class ServidorFacade {
@@ -28,8 +27,8 @@ public class ServidorFacade {
     private final ControladorFactory cf;
     private ControladorCorrida corridaAtual;
     private final ControladorDeClientes clientes;
-    private ControllerDeTratamento tratamento;
-    private ControladorDeMensagens mensagens;
+    private final ControllerDeTratamento tratamento;
+    private final ControladorDeMensagens mensagens;
     
     private static ServidorFacade facade;
     
@@ -354,7 +353,6 @@ public class ServidorFacade {
      * controlador da corrida
      *
      * @param tag Tag coletada do sensor
-     * @param voltaComputada objeto Time coletado pelo sensor
      * @throws TagInvalidaException Se a TAG não estiver cadastrada no Sistema
      * ou na partida atual
      * @throws execoes.CorridaNaoIniciadaException
@@ -367,7 +365,8 @@ public class ServidorFacade {
     public boolean statusCorrAtual(){
         return corridaAtual.getStatus();
     }
-    /***************************** MÉTODOS PARA A COMUNICAÇÃO ********************************/
+    /***************************** MÉTODOS PARA A COMUNICAÇÃO
+     * @throws java.io.IOException ********************************/
 
     
     public void iniciarClienteADM() throws IOException{                                       

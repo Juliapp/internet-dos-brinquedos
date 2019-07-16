@@ -104,7 +104,7 @@ public class ControladorCorrida {
         double ultimo = joador.getUltimaVoltaComputada().transformarEmMilisegundos();
         double agora = voltaComputada.transformarEmMilisegundos();
         
-        return ultimo <= agora - 4000;
+        return ultimo <= agora - 6000;
     }
     
     /**

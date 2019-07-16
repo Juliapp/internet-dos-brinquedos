@@ -1,5 +1,6 @@
 package servidor;
 
+import comunicacao.ConectionIO;
 import comunicacao.ThreadConections;
 import facade.ServidorFacade;
 import java.io.IOException;
@@ -13,6 +14,8 @@ public class Servidor {
     private static ThreadConections tcIO;
 
     
+    
+    
     public Servidor(){
         facade = ServidorFacade.getInstance();
     }
@@ -21,8 +24,8 @@ public class Servidor {
         try {
             Servidor server = new Servidor();
             server.conectarClientes();
-            preSet();
-            iniciarThread();
+            //preSet();
+            tcIO = new ThreadConections(facade.getConectionIOADM(), facade.getConectionIOExib(), facade.getConectionIOSensor());
             new Thread(tcIO).start();
             
         } catch (IOException ex) {
@@ -42,11 +45,12 @@ public class Servidor {
             if(!adm){
                 System.out.println("1 - Cliente ADM");
             }
-            if(!sensor){
-                System.out.println("2 - Cliente sensor");
-            }
             if(!exibicao){
-                System.out.println("3 - Cliente de exibição");
+                System.out.println("2 - Cliente de exibição");
+            }
+          
+            if(!sensor){
+                System.out.println("3 - Cliente sensor");
             }
             
             Scanner s = new Scanner(System.in);
@@ -57,22 +61,24 @@ public class Servidor {
                         facade.iniciarClienteADM();
                         adm = true;
                         break;
-                    case 2: 
-                        facade.iniciarClienteASensor();
-                        sensor = true;
-                        break;
-                    case 3: 
+                    case 2:
                         facade.iniciarClienteExibicao();
                         exibicao = true;
                         break;
+                    case 3: 
+                        facade.iniciarClienteASensor();
+                        sensor = true;
+                        break;
                     default:  System.out.println("Resposta incorreta");       
             }        
+         
         }while(!adm || !sensor || !exibicao);
+
+//        facade.iniciarClienteADM();
+
+       
     }
     
-    private static void iniciarThread(){
-        tcIO = new ThreadConections(facade.getConectionIOADM(), facade.getConectionIOExib(), facade.getConectionIOSensor());
-    }
     private static void preSet() {
         ServidorFacade facade = ServidorFacade.getInstance();
         facade.cadastrarEquipe("MUSTANG");

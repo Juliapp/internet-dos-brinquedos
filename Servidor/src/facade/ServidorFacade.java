@@ -19,7 +19,6 @@ import model.Jogador;
 import model.Piloto;
 import model.TagColetada;
 
-
 public class ServidorFacade {
 
     private final ArrayList<ControladorCorrida> contrCorrida;
@@ -29,9 +28,9 @@ public class ServidorFacade {
     private final ControladorDeClientes clientes;
     private final ControllerDeTratamento tratamento;
     private final ControladorDeMensagens mensagens;
-    
+
     private static ServidorFacade facade;
-    
+
     /**
      * Méodo construtor se inicializa instanciando cada um os controladores.
      * Essa classe é o que vai acessar todos os controladores e vai ser a classe
@@ -44,13 +43,13 @@ public class ServidorFacade {
         cf = new ControladorFactory();
         contrCorrida = new ArrayList<>();
         corridaAtual = new ControladorCorrida();
-        
+
         mensagens = new ControladorDeMensagens();
-        tratamento = new ControllerDeTratamento(this, this.mensagens, statusCorrida());
-        clientes = new ControladorDeClientes(this.tratamento, this.mensagens);
+        tratamento = new ControllerDeTratamento(this, this.mensagens);
+        clientes = new ControladorDeClientes();
     }
-    
-    public static synchronized ServidorFacade getInstance(){
+
+    public static synchronized ServidorFacade getInstance() {
         return (facade == null) ? facade = new ServidorFacade() : facade;
     }
 
@@ -324,27 +323,28 @@ public class ServidorFacade {
      * @return Caso a corrida foi instanciada com sucesso
      */
     public boolean novaCorrida(int[] ids, int quantidadeDeVoltas) {
-        
+
         ControladorCorrida c = new ControladorCorrida(getJogadoresPorArrayDeID(ids), quantidadeDeVoltas);
         corridaAtual = c;
         contrCorrida.add(c);
         return c != null;
     }
-    
-    public ArrayList<Jogador> getJogadoresPorArrayDeID(int[] ids){
+
+    public ArrayList<Jogador> getJogadoresPorArrayDeID(int[] ids) {
         return Dados.getJogadoresPorArrayDeID(ids);
     }
 
     /**
      * Da o comando para que o cronometro comece a rodar e os métodos do
      * controlador de corrida estejam aptos a serem utilizados
-     * @return 
+     *
+     * @return
      */
     public boolean comecarCorrida() {
         return corridaAtual.iniciarCorrida();
     }
-    
-    public boolean statusCorrida(){
+
+    public boolean statusCorrida() {
         return corridaAtual.getStatus();
     }
 
@@ -361,40 +361,44 @@ public class ServidorFacade {
     public void coletorDeTags(TagColetada tag) throws TagInvalidaException, CorridaNaoIniciadaException, VoltaInvalidaException {
         corridaAtual.pushTag(tag);
     }
-    
-    public boolean statusCorrAtual(){
+
+    public boolean statusCorrAtual() {
         return corridaAtual.getStatus();
     }
-    /***************************** MÉTODOS PARA A COMUNICAÇÃO
-     * @throws java.io.IOException ********************************/
 
-    
-    public void iniciarClienteADM() throws IOException{                                       
-        clientes.iniciarClienteADM();
-    }
-    
-    public void iniciarClienteASensor() throws IOException{
-        clientes.iniciarClienteASensor();
-    }
-    
-    public void iniciarClienteExibicao() throws IOException{
-        clientes.iniciarClienteExibicao();
+    /**
+     * *************************** MÉTODOS PARA A COMUNICAÇÃO
+     *
+     * @throws java.io.IOException *******************************
+     */
+
+    public void iniciarClienteADM() throws IOException {
+        clientes.iniciarClienteADM(tratamento, mensagens);
     }
 
-    public ConectionIO getConectionIOADM(){
+    public void iniciarClienteASensor() throws IOException {
+        clientes.iniciarClienteASensor(tratamento, mensagens);
+    }
+
+    public void iniciarClienteExibicao() throws IOException {
+        clientes.iniciarClienteExibicao(tratamento, mensagens);
+    }
+
+    public ConectionIO getConectionIOADM() {
         return clientes.getConectionIOADM();
     }
-    
-    public ConectionIO getConectionIOExib(){
-        return clientes.getConectionIOExib();
-    }   
-    
-    public ConectionIO getConectionIOSensor(){
-        return clientes.getConectionIOSensor();
-    }       
-    
-    public ArrayList<Jogador> jogadoresDaCorridaAtual(){
-        return corridaAtual.getJogadoresDaCorridaAtual();
+
+    public ConectionIO getConectionIOExib() {
+        if (clientes.getConectionIOExib() == null) {
+            System.out.println("Nulo");
+        } else {
+            return clientes.getConectionIOExib();
+        }
+        return null;
     }
-    
+
+    public ConectionIO getConectionIOSensor() {
+        return clientes.getConectionIOSensor();
+    }
+
 }

@@ -53,9 +53,7 @@ public class ConectionIO {
         if(bytes.length > 0){
             tratamento.tratarMensagem(bytes);
         }
-        if(id != Solicitante.ClienteADM){
-            System.out.print(bytes.length + "       " + id + "\n");     
-        }
+        //System.out.print(bytes.length + "       " + "\n");        
     }
     
     private byte[] toByteArray(InputStream input) throws IOException{

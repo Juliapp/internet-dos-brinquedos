@@ -15,7 +15,16 @@ public class ThreadConections extends Thread{
         this.exib = exib;
         this.sensor = sensor;
     }
-        
+    
+    public ThreadConections(ConectionIO adm, ConectionIO exib) {
+        this.adm = adm;
+        this.exib = exib;
+    }
+    
+    public ThreadConections(ConectionIO adm){
+        this.adm = adm;
+    }
+    
     @Override
     public void run() {
         while(!Thread.currentThread().isInterrupted()){

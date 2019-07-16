@@ -10,26 +10,22 @@ public class ControladorDeClientes {
    private Conexao sensor;
    private Conexao exibicao;
    
-    private final ControllerDeTratamento tratamento;
-    private final ControladorDeMensagens mensagens;
 
-    public ControladorDeClientes(ControllerDeTratamento tratamento, ControladorDeMensagens mensagens) {
-        this.tratamento = tratamento;
-        this.mensagens = mensagens;
+    public ControladorDeClientes() {
     }
     
     
-    public void iniciarClienteADM() throws IOException{                                       
+    public void iniciarClienteADM(ControllerDeTratamento tratamento, ControladorDeMensagens mensagens) throws IOException{                                       
         adm = new Conexao(Solicitante.ClienteADM, tratamento, mensagens);
         adm.iniciar();
     }
     
-    public void iniciarClienteASensor() throws IOException{
+    public void iniciarClienteASensor(ControllerDeTratamento tratamento, ControladorDeMensagens mensagens) throws IOException{
         sensor = new Conexao(Solicitante.Sensor, tratamento, mensagens);
         sensor.iniciar();
     }
     
-    public void iniciarClienteExibicao() throws IOException{
+    public void iniciarClienteExibicao(ControllerDeTratamento tratamento, ControladorDeMensagens mensagens) throws IOException{
         exibicao = new Conexao(Solicitante.ClienteExib, tratamento, mensagens);
         exibicao.iniciar();
     }
@@ -39,11 +35,11 @@ public class ControladorDeClientes {
     }
     
     public ConectionIO getConectionIOExib(){
-        return adm.getConectionIO();
+        return exibicao.getConectionIO();
     }   
     
     public ConectionIO getConectionIOSensor(){
-        return adm.getConectionIO();
+        return sensor.getConectionIO();
     }    
     
 }

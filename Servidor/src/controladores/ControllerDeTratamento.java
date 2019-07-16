@@ -5,7 +5,6 @@
  */
 package controladores;
 
-import comunicacao.Solicitante;
 import execoes.CorridaNaoIniciadaException;
 import facade.ServidorFacade;
 import execoes.PilotoNaoExisteException;
@@ -14,7 +13,6 @@ import execoes.VoltaInvalidaException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -29,16 +27,15 @@ import org.json.JSONObject;
 
 public class ControllerDeTratamento {
 
-    private final ServidorFacade facade;
-    private final ControladorDeMensagens mensagem;
+    private ServidorFacade facade;
+    private ControladorDeMensagens mensagem;
     private boolean rodandoCorrida;
     private String curTag;
     
-    public ControllerDeTratamento(ServidorFacade facade, ControladorDeMensagens mensagem, boolean rodandoCorrida){
-        this.rodandoCorrida = rodandoCorrida;
+    public ControllerDeTratamento(ServidorFacade facade, ControladorDeMensagens mensagem){
         this.mensagem = mensagem;
         this.facade = facade;
-        
+        rodandoCorrida = facade.statusCorrAtual();
     }
 
     public byte[] convertToByte(String string) {
@@ -93,10 +90,8 @@ public class ControllerDeTratamento {
                         Iterator<Carro> carros = facade.getListaDeCarros().iterator();
                         JSONArray arrayCarros = new JSONArray();
                         while (carros.hasNext()) {
-                            System.out.println("Repetindo...");
                             Carro carro = (Carro) carros.next();
                             arrayCarros.put(carro.toString());
-                            System.out.println("Enviou!!!");
                         }
 
                         JSONObject dadosCarros = new JSONObject();
@@ -146,13 +141,10 @@ public class ControllerDeTratamento {
             case "ClienteExib":
                 break;
             case "Sensor":
-                        
                         if(rodandoCorrida){
                             //jogar as tags na corrida
                             try {
                                 facade.coletorDeTags(new TagColetada(dados.getString("tag"), converterTempo(dados.getString("tempo"))));
-                                //Mandar mensagem pra o cliente de exibição
-                                tabelaExibicao();
                             } catch (TagInvalidaException | CorridaNaoIniciadaException | VoltaInvalidaException | ParseException ex) {
                                 Logger.getLogger(ControllerDeTratamento.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -178,17 +170,5 @@ public class ControllerDeTratamento {
         
         return new Time(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
                         c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
-    }
-    
-    public void tabelaExibicao(){
-        ArrayList <Jogador> jogadores = facade.jogadoresDaCorridaAtual();
-        JSONArray arrayJogadores = new JSONArray();
-        while(jogadores.iterator().hasNext()){
-            Jogador j = jogadores.iterator().next();
-            arrayJogadores.put(j.toString());
-        }
-        JSONObject dados = new JSONObject();
-        dados.put("arrayDeJogadores", arrayJogadores);
-        respostaCliente("ClienteExib", dados);
     }
 }

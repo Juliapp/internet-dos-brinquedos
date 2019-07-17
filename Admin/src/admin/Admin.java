@@ -46,6 +46,7 @@ public class Admin {
 
         } catch (NumberFormatException e) {
             System.out.println("Digite só números!");
+            System.out.println("");
             menuPrincipal();
         }
         return opc;

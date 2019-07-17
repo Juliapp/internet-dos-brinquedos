@@ -36,12 +36,18 @@ public class Admin {
     }
 
     public int menuPrincipal() throws IOException {
-        int opc;
-        System.out.println("Menu Internet dos Brinquedos");
-        System.out.println("1- Realizar Cadastro de Carros\n"
-                + "2- Realizar Cadastro de Jogadores\n"
-                + "3- Iniciar Partida");
-        opc = Console.readInt();
+        int opc = 0;
+        try {
+            System.out.println("Menu Internet dos Brinquedos");
+            System.out.println("1- Realizar Cadastro de Carros\n"
+                    + "2- Realizar Cadastro de Jogadores\n"
+                    + "3- Iniciar Partida");
+            opc = Console.readInt();
+
+        } catch (NumberFormatException e) {
+            System.out.println("Digite só números!");
+            menuPrincipal();
+        }
         return opc;
     }
 
@@ -51,14 +57,19 @@ public class Admin {
         System.out.println(convert.toString());
     }
 
-    public int cadastroCarros() throws IOException, ClassNotFoundException, InterruptedException {
+    public int cadastroCarros() throws IOException, InterruptedException {
         String op;
+        String cor;
+        String equipe;
+        do {
+            System.out.println("Informe a cor do carro!");
+            cor = Console.readString();
 
-        System.out.println("Informe a cor do carro!");
-        String cor = Console.readString();
+            System.out.println("Informe a equipe pertencente!");
+            equipe = Console.readString();
 
-        System.out.println("Informe a equipe pertencente!");
-        String equipe = Console.readString();
+        } while (!cor.matches("[^\\d]+") | !equipe.matches("[^\\d]+"));
+
         JSONObject carro = new JSONObject();
 
         carro.put("cor", cor);
@@ -72,9 +83,10 @@ public class Admin {
         facade.novaMensagem(carro.getString("solicitante"), bytes);
 
         System.out.println(facade.getRespostaJSON().getString("status"));
-
-        System.out.println("Deseja cadastrar novamente? S/N");
-        op = Console.readString();
+        do {
+            System.out.println("Deseja cadastrar novamente? S/N");
+            op = Console.readString();
+        } while (!op.matches("[^\\d]+"));
         if (op.equals("S") | op.equals("s")) {
             return 1;
         } else {
@@ -96,20 +108,22 @@ public class Admin {
         facade.novaMensagem(iterar.getString("solicitante"), bytes);
 
         JSONArray array = facade.getRespostaJSON().getJSONArray("arrayDeCarros");
-        
-        for(int i = 0; i < array.length(); i++){
+
+        for (int i = 0; i < array.length(); i++) {
             String info = array.getString(i);
             System.out.println(info);
         }
-        
-         
+
     }
 
-    public int cadastroJogadores() throws IOException, ClassNotFoundException, InterruptedException {
+    public int cadastroJogadores() throws IOException, InterruptedException {
         String op;
+        String nome;
+        do {
+            System.out.println("Informe o seu nome:");
+            nome = Console.readString();
 
-        System.out.println("Informe o seu nome:");
-        String nome = Console.readString();
+        } while (!nome.matches("[^\\d]+"));
         JSONObject piloto = new JSONObject();
 
         piloto.put("nomePiloto", nome);
@@ -122,11 +136,13 @@ public class Admin {
         facade.novaMensagem(piloto.getString("solicitante"), bytes);
 
         System.out.println(facade.getRespostaJSON().getString("status"));
-
         iterarCarros();
-        System.out.println("Informe o ID do carro desejado!");
+        String idCarro;
 
-        String idCarro = Console.readString();
+        do {
+            System.out.println("Informe o ID do carro desejado!");
+            idCarro = Console.readString();
+        } while (idCarro.matches("[^\\d]+") == false);
 
         JSONObject jogador = new JSONObject();
 
@@ -139,9 +155,10 @@ public class Admin {
         byte[] bytesArray = dados_Jogador.getBytes(StandardCharsets.UTF_8);
         facade.novaMensagem(jogador.getString("solicitante"), bytesArray);
         System.out.println(facade.getRespostaJSON().getString("status"));
-
-        System.out.println("Deseja cadastrar novamente? S/N");
-        op = Console.readString();
+        do {
+            System.out.println("Deseja cadastrar novamente? S/N");
+            op = Console.readString();
+        } while (!op.matches("[^\\d]+"));
         if (op.equals("S") | op.equals("s")) {
             return 1;
         } else {
@@ -162,22 +179,28 @@ public class Admin {
         facade.novaMensagem(iterar.getString("solicitante"), bytes);
 
         JSONArray array = facade.getRespostaJSON().getJSONArray("arrayDeJogadores");
-        
-        for(int i = 0; i < array.length(); i++){
+
+        for (int i = 0; i < array.length(); i++) {
             String info = array.getString(i);
             System.out.println(info);
         }
     }
 
-    public void iniciaPartida() throws IOException, ClassNotFoundException, InterruptedException {
+    public void iniciaPartida() throws IOException, InterruptedException {
 
         String op;
-        System.out.println("Quantas voltas deseja?");
-        int voltas = Console.readInt();
+        String voltaas;
+        String quant;
 
-        System.out.println("Quantos jogadores irão jogar?");
-        String quant = Console.readString();
+        do {
+            System.out.println("Quantas voltas deseja?");
+            voltaas = Console.readString();
+
+            System.out.println("Quantos jogadores irão jogar?");
+            quant = Console.readString();
+        } while (!voltaas.matches("[^\\d]+") | !quant.matches("[^\\d]+"));
         Integer QuantosVaoJogar = new Integer(quant);
+        Integer voltas = new Integer(voltaas);
 
         JSONArray jogadores_participantes = new JSONArray();
 
@@ -220,6 +243,14 @@ public class Admin {
                     bytes = inicia_partida.getBytes();
                     facade.novaMensagem(dados.getString("solicitante"), bytes);
                     System.out.println(facade.getRespostaJSON().getString("status"));
+
+                    dados.put("command", "StatusCorrida");
+                    inicia_partida = dados.toString();
+                    bytes = inicia_partida.getBytes();
+                    while (facade.getRespostaJSON().getString("StatusCorrida").equals("Rodando")) {
+                        facade.novaMensagem(dados.getString("solicitante"), bytes);
+                    }
+
                     break;
             }
             System.out.println(".");
@@ -228,10 +259,9 @@ public class Admin {
 
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         try {
             int repeat = 0;
-            //Ta dando Erroooooo
             Admin admin = new Admin();
             conectarClientes();
             tcIO = new ThreadConections(facade.getConectionIOADM());
@@ -254,13 +284,12 @@ public class Admin {
                         } while (repeat == 1);
                         break;
                     case 3:
-
                         admin.iniciaPartida();
-
+                        break;
                 }
             } while (repeat == 0);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Erro:" + e);
         }
 
     }
@@ -268,7 +297,6 @@ public class Admin {
     private static void conectarClientes() throws IOException {
         System.out.println("----- Internet dos brinquedos -----");
         System.out.println("Conexão do cliente Administrador");
-        boolean adm = false, sensor = false, exibicao = false;
 
         facade.iniciarClienteADM();
     }

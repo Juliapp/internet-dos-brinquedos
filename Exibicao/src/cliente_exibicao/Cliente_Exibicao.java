@@ -32,15 +32,4 @@ public class Cliente_Exibicao extends Application{
 
     }
     
-  /* 
-    public static void main(String[] args) throws IOException {
-        Cliente_Exibicao exibicao = new Cliente_Exibicao();
-        //exibicao.conectarServidor();
-        tcIO = new ThreadConections(facade.getConectionIO());
-        new Thread(tcIO).start();        
-        
-    }
-   */
-
-
 }

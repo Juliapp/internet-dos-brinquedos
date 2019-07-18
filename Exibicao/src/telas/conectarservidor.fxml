@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="376.0" prefWidth="576.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.ConectarServerController">
+    <children>
+        <Button id="conectarServer" fx:id="conectarServer" layoutX="242.0" layoutY="247.0" onAction="#handleButtonAction" text="Conectar com o Servidor" />
+      <Label layoutX="137.0" layoutY="65.0" text="Conecte-se com o servidor!">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="191.0" layoutY="192.0" text="Porta">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="154.0" layoutY="143.0" text="Endereço IP">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField id="entradaIP" fx:id="entradaIP" layoutX="242.0" layoutY="140.0" prefHeight="25.0" prefWidth="196.0" promptText="ip" />
+      <TextField id="entradaPorta" fx:id="entradaPorta" layoutX="242.0" layoutY="189.0" promptText="porta" text="1234" />
+    </children>
+</AnchorPane>

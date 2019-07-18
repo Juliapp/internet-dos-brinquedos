@@ -10,8 +10,6 @@ import facade.ServidorFacade;
 import execoes.PilotoNaoExisteException;
 import execoes.TagInvalidaException;
 import execoes.VoltaInvalidaException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,8 +32,8 @@ public class ControllerDeTratamento {
     private ControladorDeMensagens mensagem;
     private boolean rodandoCorrida;
     private String curTag;
-
-    public ControllerDeTratamento(ServidorFacade facade, ControladorDeMensagens mensagem) {
+    
+    public ControllerDeTratamento(ServidorFacade facade, ControladorDeMensagens mensagem){
         this.mensagem = mensagem;
         this.facade = facade;
         rodandoCorrida = facade.statusCorrAtual();
@@ -56,7 +54,7 @@ public class ControllerDeTratamento {
         mensagem.novaMensagem(id, bytes);
     }
 
-    public void tratarMensagem(byte[] bytes) throws PilotoNaoExisteException, IOException, FileNotFoundException, ClassNotFoundException {
+    public void tratarMensagem(byte[] bytes) throws PilotoNaoExisteException {
 
         String info = new String(bytes, StandardCharsets.UTF_8);
         System.out.println(info);
@@ -71,7 +69,7 @@ public class ControllerDeTratamento {
                             respostaCliente(dados.getString("solicitante"), dados);
                         }
                         break;
-
+                        
                     case "CadPiloto":
                         if (facade.cadastrarPiloto(dados.getString("nomePiloto"), null)) {
                             //responde a solicitação do cliente!
@@ -80,7 +78,7 @@ public class ControllerDeTratamento {
 
                         }
                         break;
-
+                        
                     case "CadJogador":
                         if (facade.CadastrarJogador(dados.getInt("idCarro"), dados.getString("nome"))) {
                             //responde a solicitação do cliente!
@@ -88,7 +86,7 @@ public class ControllerDeTratamento {
                             respostaCliente(dados.getString("solicitante"), dados);
                         }
                         break;
-
+                        
                     case "IterarCarros":
                         Iterator<Carro> carros = facade.getListaDeCarros().iterator();
                         JSONArray arrayCarros = new JSONArray();
@@ -102,7 +100,7 @@ public class ControllerDeTratamento {
                         respostaCliente(dados.getString("solicitante"), dadosCarros);
                         //responde a solicitação do cliente, enviando o json com o array de Carros
                         break;
-
+                        
                     case "IterarJogadores":
                         Iterator<Jogador> jogadores = facade.getListaDeJogadores().iterator();
                         JSONArray arrayJogadores = new JSONArray();
@@ -115,71 +113,65 @@ public class ControllerDeTratamento {
                         dadosJogadores.put("arrayDeJogadores", arrayJogadores);
                         respostaCliente(dados.getString("solicitante"), dadosJogadores);
                         break;
-
+                        
+                    case "EtapaClassificacao":
+                        
+                        
+                        break;
+                        
                     case "PreConfigCorrida":
-                        JSONArray arrayIds = dados.getJSONArray("ids_jogadores");
+                        JSONArray arrayIds = dados.getJSONArray("ids_jogadores"); 
                         int[] ids = new int[arrayIds.length()];
-
-                        for (int i = 0; i < arrayIds.length(); i++) {
+                        
+                        for(int i = 0; i < arrayIds.length(); i++){
                             ids[i] = arrayIds.optInt(i);
                         }
-                        if (facade.novaCorrida(ids, dados.getInt("num_voltas"))) {
-
+                        if(facade.novaCorrida(ids, dados.getInt("num_voltas"))){
+                            
                         }
                         break;
-
-                    case "StatusCorrida":
-                        if (rodandoCorrida == true) {
-                            dados.put("status", "Rodando");
-                            respostaCliente(dados.getString("solicitante"), dados);
-                        } else {
-                            dados.put("status", "Finalizada");
-                            respostaCliente(dados.getString("solicitante"), dados);
-                        }
-                        break;
-
+                        
                     case "ComeçarCorrida":
-                        if (facade.comecarCorrida()) {
-                            rodandoCorrida = facade.statusCorrAtual();
-                            System.out.println(rodandoCorrida);
+                        if(facade.comecarCorrida()){
                             dados.put("status", "Corrida Iniciada, Tudo pronto!!!");
                             respostaCliente(dados.getString("solicitante"), dados);
                         }
                         break;
-
+                    
                 }
             case "ClienteExib":
                 break;
             case "Sensor":
-                if (rodandoCorrida) {
-                    //jogar as tags na corrida
-                    try {
-                        facade.coletorDeTags(new TagColetada(dados.getString("tag"), converterTempo(dados.getString("tempo"))));
-                    } catch (TagInvalidaException | CorridaNaoIniciadaException | VoltaInvalidaException | ParseException ex) {
-                        Logger.getLogger(ControllerDeTratamento.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    //pega a tag atual pra ser cadastrada
-                    curTag = dados.getString("tag");
-                }
+                        if(rodandoCorrida){
+                            //jogar as tags na corrida
+                            try {
+                                facade.coletorDeTags(new TagColetada(dados.getString("tag"), converterTempo(dados.getString("tempo"))));
+                                tabelaExibicao();
+                            } catch (TagInvalidaException | CorridaNaoIniciadaException | VoltaInvalidaException | ParseException ex) {
+                                Logger.getLogger(ControllerDeTratamento.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }else{
+                            //pega a tag atual pra ser cadastrada
+                            curTag = dados.getString("tag");
+                        }
                 break;
-
-            default:
-                System.out.println("Argumento inválido");
-
+                
+            default: 
+                    System.out.println("Argumento inválido");
+                
         }
-        facade.armazenarDados();
 
     }
 
-    public Time converterTempo(String tempo) throws ParseException {
+    
+    public Time converterTempo(String tempo) throws ParseException{
 
-        SimpleDateFormat parseData = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss.SSSSSS");
+        SimpleDateFormat parseData = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss.SSSSSS"); 
         Calendar c = GregorianCalendar.getInstance();
         c.setTime(parseData.parse(tempo));
-
+        
         return new Time(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
-                c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
+                        c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
     }
     
     public void tabelaExibicao(){
@@ -193,5 +185,5 @@ public class ControllerDeTratamento {
         JSONObject dados = new JSONObject();
         dados.put("arrayDeJogadores", arrayJogadores);
         respostaCliente("ClienteExib", dados);
-    }	    
+    }	     
 }

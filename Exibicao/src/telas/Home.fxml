@@ -7,17 +7,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="655.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cliente_exibicao.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="655.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.FXMLDocumentController">
     <children>
-      <TableView id="tabela" layoutX="149.0" layoutY="197.0" prefHeight="417.0" prefWidth="982.0">
+      <TableView id="tabela" layoutX="149.0" layoutY="197.0" prefHeight="255.0" prefWidth="982.0">
         <columns>
-          <TableColumn id="posicao" prefWidth="58.0" text="POS" />
+          <TableColumn id="posicao" fx:id="posCol" prefWidth="58.0" text="POS" />
           <TableColumn id="cor" prefWidth="48.0" />
-            <TableColumn id="pilotos" prefWidth="235.0" text="PILOTO" />
-            <TableColumn id="times" prefWidth="128.0" text="TIME" />
-            <TableColumn id="tempoDeVolta" prefWidth="243.0" text="TEMPO DE VOLTA " />
-            <TableColumn id="voltaMaisRapida" minWidth="3.0" prefWidth="172.0" text="VOLTA MAIS RÁPIDA " />
-            <TableColumn id="voltas" prefWidth="97.0" text="VOLTAS" />
+            <TableColumn id="pilotos" fx:id="pilotoCol" prefWidth="235.0" text="PILOTO" />
+            <TableColumn id="times" fx:id="timeCol" prefWidth="128.0" text="TIME" />
+            <TableColumn id="tempoDeVolta" fx:id="tempoCol" prefWidth="243.0" text="TEMPO DE VOLTA " />
+            <TableColumn id="voltaMaisRapida" fx:id="VoltaMRCol" minWidth="3.0" prefWidth="172.0" text="VOLTA MAIS RÁPIDA " />
+            <TableColumn id="voltas" fx:id="VoltasCol" prefWidth="97.0" text="VOLTAS" />
         </columns>
       </TableView>
       <Text layoutX="204.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SESSÃO DA CORRIDA:" wrappingWidth="326.607421875">

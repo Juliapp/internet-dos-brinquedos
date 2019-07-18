@@ -1,12 +1,6 @@
 package model;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-public class Jogador implements Serializable {
-    private static final long serialVersionUID = 3L;
+public class Jogador {
     private Carro carro;
     private Piloto piloto;
     private Time voltaMaisRapida;
@@ -126,8 +120,10 @@ public class Jogador implements Serializable {
 
     @Override
     public String toString() {
-        return '{' + "Id: "+ id + " Nome: " + piloto.getNome() + " Id-Carro: " 
-                + carro.getId() + " Equipe: " + carro.getEquipe().getNome() + " Cor: " + carro.getCor() + '}';
+        return '{' + "Id: "+ id + " nome: " + piloto.getNome() + " Id-Carro: " 
+                + carro.getId() + " Equipe: " + carro.getEquipe().getNome() + " Cor: " + carro.getCor()
+                + "ultimaVolta: " + ultimaVoltaComputada.toString() + "maisRapida: " +voltaMaisRapida.toString() 
+                +"voltas: " + voltas + '}';
     }
     
     

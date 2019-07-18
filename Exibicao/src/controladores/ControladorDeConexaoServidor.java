@@ -1,7 +1,10 @@
 package controladores;
 
+
+
 import comunicacao.ConectionIO;
 import comunicacao.Conexao;
+import controladores.ControllerDeTratamento;
 import java.io.IOException;
 
 public class ControladorDeConexaoServidor {
@@ -20,6 +23,10 @@ public class ControladorDeConexaoServidor {
     
     public ConectionIO getConectionIO(){
         return servidor.getConectionIO();
+    }
+
+    public void conectarServidor(String ip, int host) {
+        servidor = new Conexao(tratamento, ip, host);
     }
 
     

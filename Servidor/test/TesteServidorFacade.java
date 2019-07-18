@@ -6,6 +6,8 @@
 
 import facade.ServidorFacade;
 import execoes.PilotoNaoExisteException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import model.Carro;
 import model.Jogador;
 import org.junit.Before;
@@ -21,7 +23,7 @@ public class TesteServidorFacade {
 
     private ServidorFacade sf;
 
-    public TesteServidorFacade() {
+    public TesteServidorFacade() throws IOException, FileNotFoundException, ClassNotFoundException {
 
         this.sf = ServidorFacade.getInstance();
     }

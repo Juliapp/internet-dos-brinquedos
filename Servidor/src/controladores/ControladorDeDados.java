@@ -1,33 +1,57 @@
 package controladores;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import model.Carro;
 import model.Equipe;
 import model.Jogador;
 import model.Piloto;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
- *O controlador de dados controla os dados cadastráveis do sistema. Essa classe na segunda versão ganhará um banco de dados.
+ * O controlador de dados controla os dados cadastráveis do sistema. Essa classe
+ * na segunda versão ganhará um banco de dados.
  */
 public class ControladorDeDados {
+
     private ArrayList<Piloto> pilotos;
     private ArrayList<Equipe> equipes;
     private ArrayList<Carro> carros;
     private ArrayList<Jogador> jogadores;
 
+    File fileCarros = null;
+    File fileEquipes = null;
+    File filePilotos = null;
+    File fileJogadores = null;
+
     /**
-     *Instancia das listas encadeadas 
+     * Instancia das listas encadeadas
      */
-    public ControladorDeDados() {
+    public ControladorDeDados() throws IOException, FileNotFoundException, ClassNotFoundException {
         pilotos = new ArrayList<>();
         equipes = new ArrayList<>();
-        carros  = new ArrayList<>();    
+        carros = new ArrayList<>();
         jogadores = new ArrayList<>();
-    }    
-    
+
+    }
+
     /**
-     *Adiciona um piloto a lista encadeada se ele não existir 
+     * Adiciona um piloto a lista encadeada se ele não existir
+     *
      * @param piloto piloto a ser cadastrado
      * @return verdadeiro se foi cadastrado com sucesso
      */
@@ -38,13 +62,14 @@ public class ControladorDeDados {
             pilotos.add(piloto);
         } else {
             return false;
-        }      
+        }
         return true;
     }
 
     /**
-     *Percorre a lista encadeada em busca de um piloto com o mesmo nome.
-     *Nesta aplicação os pilotos de mesmo nome são dados como iguais 
+     * Percorre a lista encadeada em busca de um piloto com o mesmo nome. Nesta
+     * aplicação os pilotos de mesmo nome são dados como iguais
+     *
      * @param nomeDoPiloto
      * @return Verdadeiro caso o piloto já esteja cadastrado
      */
@@ -53,13 +78,16 @@ public class ControladorDeDados {
         Iterator<Piloto> it = itPiloto();
         while (it.hasNext()) {
             pilotoAux = it.next();
-            if(pilotoAux.getNome().equals(nomeDoPiloto)){ return true; }
+            if (pilotoAux.getNome().equals(nomeDoPiloto)) {
+                return true;
+            }
         }
         return false; //jogar exceção piloto não existe
     }
 
     /**
-     *Pega o iterador do ArrayList de Pilotos
+     * Pega o iterador do ArrayList de Pilotos
+     *
      * @return Iterador de pilotos
      */
     public Iterator<Piloto> itPiloto() {
@@ -67,49 +95,56 @@ public class ControladorDeDados {
     }
 
     /**
-     *Pega o piloto com determinado nome passado por parâmetro
+     * Pega o piloto com determinado nome passado por parâmetro
+     *
      * @param nome do piloto
-     * @return o objeto piloto caso exista na lista encadeada 
+     * @return o objeto piloto caso exista na lista encadeada
      */
     public Piloto getPiloto(String nome) {
-        if(hasPiloto(nome)){
+        if (hasPiloto(nome)) {
             return pilotos.get(getIndexPiloto(nome));
         }
-        return null; 
+        return null;
     }
-    
+
     /**
-     *Percorre a lista encadeada em busca do index do piloto a partir de seu nome
+     * Percorre a lista encadeada em busca do index do piloto a partir de seu
+     * nome
+     *
      * @param nomeDoPiloto nome do piloto
-     * @return número do index do piloto 
+     * @return número do index do piloto
      */
-    public int getIndexPiloto(String nomeDoPiloto){
+    public int getIndexPiloto(String nomeDoPiloto) {
         Piloto pilotoAux;
         Iterator<Piloto> it = itPiloto();
         int index = 0;
-        while (it.hasNext()){
+        while (it.hasNext()) {
             pilotoAux = it.next();
-            if(pilotoAux.getNome().equals(nomeDoPiloto)){ return index; }
+            if (pilotoAux.getNome().equals(nomeDoPiloto)) {
+                return index;
+            }
             index++;
         }
         return 0;
     }
-    
+
     /**
-     *Deleta um piloto da lista encadeada a partir do seu nome, buscando-o pelo index
+     * Deleta um piloto da lista encadeada a partir do seu nome, buscando-o pelo
+     * index
+     *
      * @param nomeDoPiloto nome do piloto a ser removido
      * @return verdadeiro se for removido com sucesso
      */
     public boolean deletePiloto(String nomeDoPiloto) {
-        if(hasPiloto(nomeDoPiloto)){
+        if (hasPiloto(nomeDoPiloto)) {
             pilotos.remove(getIndexPiloto(nomeDoPiloto));
             return true;
         }
         return false;
     }
-    
+
     /**
-     *Lista no console a lista de pilotos cadastrados no sistema 
+     * Lista no console a lista de pilotos cadastrados no sistema
      */
     public void listarPilotos() {
         Piloto piloto;
@@ -119,17 +154,19 @@ public class ControladorDeDados {
             System.out.println(piloto.getNome());
         }
     }
-    
+
     /**
-     *Pega a referência da lista encadeada de pilotos
+     * Pega a referência da lista encadeada de pilotos
+     *
      * @return ArrayList de pilotos cadastrados
      */
     public ArrayList<Piloto> getPilotos() {
         return pilotos;
-    }    
-    
+    }
+
     /**
-     *Adiciona uma equipe a lista encadeada se ele não existir 
+     * Adiciona uma equipe a lista encadeada se ele não existir
+     *
      * @param equipe
      * @return verdadeiro caso foi cadastrado com sucesso
      */
@@ -143,9 +180,10 @@ public class ControladorDeDados {
         }
         return true;
     }
-    
+
     /**
-     *Percorre a lista encadeada em busca de uma equipe com o mesmo nome.
+     * Percorre a lista encadeada em busca de uma equipe com o mesmo nome.
+     *
      * @param nomeDaEquipe
      * @return Verdadeiro caso a equipe já esteja cadastrado
      */
@@ -154,13 +192,16 @@ public class ControladorDeDados {
         Iterator<Equipe> it = itEquipe();
         while (it.hasNext()) {
             e = it.next();
-            if (e.getNome().equals(nomeDaEquipe)) { return true; }
-        }   
+            if (e.getNome().equals(nomeDaEquipe)) {
+                return true;
+            }
+        }
         return false;
     }
-    
+
     /**
-     *Pega o iterador do ArrayList de equipes
+     * Pega o iterador do ArrayList de equipes
+     *
      * @return Iterador de equipes
      */
     public Iterator<Equipe> itEquipe() {
@@ -168,36 +209,41 @@ public class ControladorDeDados {
     }
 
     /**
-     *Pega a equipe com determinado nome passado por parâmetro
+     * Pega a equipe com determinado nome passado por parâmetro
+     *
      * @param nome da equipe
-     * @return o objeto equipe caso exista na lista encadeada 
+     * @return o objeto equipe caso exista na lista encadeada
      */
     public Equipe getEquipe(String nome) {
-        if(hasEquipe(nome)){
+        if (hasEquipe(nome)) {
             return equipes.get(getIndexEquipe(nome));
         }
         return null;
     }
-    
+
     /**
-     *Percorre a lista encadeada em busca do index da equipe a partir de seu nome
+     * Percorre a lista encadeada em busca do index da equipe a partir de seu
+     * nome
+     *
      * @param nome nome da equipe
-     * @return número do index da equipe 
+     * @return número do index da equipe
      */
-    public int getIndexEquipe(String nome){
+    public int getIndexEquipe(String nome) {
         Equipe equipe;
         Iterator<Equipe> it = itEquipe();
         int index = 0;
-        while (it.hasNext()){
+        while (it.hasNext()) {
             equipe = it.next();
-            if(equipe.getNome().equals(nome)){ return index; }
+            if (equipe.getNome().equals(nome)) {
+                return index;
+            }
             index++;
         }
         return 0;
     }
-    
+
     /**
-     *Lista no console a lista de pilotos cadastrados no sistema 
+     * Lista no console a lista de pilotos cadastrados no sistema
      */
     public void listarEquipes() {
         Equipe e;
@@ -205,32 +251,36 @@ public class ControladorDeDados {
         while (it.hasNext()) {
             e = it.next();
             System.out.println(e.getNome());
-        }        
+        }
     }
- 
+
     /**
-     *Deleta uma equipe da lista encadeada a partir do seu nome, buscando-a pelo index
+     * Deleta uma equipe da lista encadeada a partir do seu nome, buscando-a
+     * pelo index
+     *
      * @param nomeDaEquipe da equipe a ser removido
      * @return verdadeiro se for removido com sucesso
      */
     public boolean deleteEquipe(String nomeDaEquipe) {
-        if(hasEquipe(nomeDaEquipe)){
+        if (hasEquipe(nomeDaEquipe)) {
             equipes.remove(getIndexEquipe(nomeDaEquipe));
             return true;
         }
         return false;
     }
-    
+
     /**
-     *Pega a referência da lista encadeada de equipes
+     * Pega a referência da lista encadeada de equipes
+     *
      * @return ArrayList de equipes cadastradas
      */
     public ArrayList<Equipe> getEquipes() {
         return equipes;
     }
-    
+
     /**
-     *Adiciona um carro a lista encadeada se ele não existir 
+     * Adiciona um carro a lista encadeada se ele não existir
+     *
      * @param carro
      * @return verdadeiro caso o carro tenha sido cadastrado com sucesso
      */
@@ -244,9 +294,10 @@ public class ControladorDeDados {
         }
         return true;
     }
-    
+
     /**
-     *Percorre a lista encadeada em busca de um carro com a mesma tag.
+     * Percorre a lista encadeada em busca de um carro com a mesma tag.
+     *
      * @param tag tag do carro a ser buscada
      * @return Verdadeiro caso o carro já esteja cadastrado
      */
@@ -255,50 +306,59 @@ public class ControladorDeDados {
         Iterator<Carro> it = itCarro();
         while (it.hasNext()) {
             carro = it.next();
-            if(carro.getTag().equals(tag)) { return true; }
+            if (carro.getTag().equals(tag)) {
+                return true;
+            }
         }
         return false;
     }
-    
+
     /**
-     *Pega o iterador do ArrayList de carros
+     * Pega o iterador do ArrayList de carros
+     *
      * @return Iterador de carros
      */
     public Iterator<Carro> itCarro() {
         return carros.iterator();
     }
-    
+
     /**
-     *Pega o carro com determinada tag passada por parâmetro
+     * Pega o carro com determinada tag passada por parâmetro
+     *
      * @param tag tag do carro
-     * @return o objeto carro caso exista na lista encadeada 
+     * @return o objeto carro caso exista na lista encadeada
      */
     public Carro getCarro(String tag) {
-        if(hasCarro(tag)){
-           return carros.remove(getIndexCarro(tag));
+        if (hasCarro(tag)) {
+            return carros.remove(getIndexCarro(tag));
         }
         return null;
     }
-    
+
     /**
-     *Percorre a lista encadeada em busca do index do carro a partir de seu nome
+     * Percorre a lista encadeada em busca do index do carro a partir de seu
+     * nome
+     *
      * @param tag tag do carro
      * @return número do index do carro
      */
-    public int getIndexCarro(String tag){
+    public int getIndexCarro(String tag) {
         Carro carro;
         Iterator<Carro> it = itCarro();
         int index = 0;
-        while (it.hasNext()){
+        while (it.hasNext()) {
             carro = it.next();
-            if(carro.getTag().equals(tag)){ return index; }
+            if (carro.getTag().equals(tag)) {
+                return index;
+            }
             index++;
         }
-        return 0; 
+        return 0;
     }
 
     /**
-     *Pega o objeto carro com a cor passada por parâmetro
+     * Pega o objeto carro com a cor passada por parâmetro
+     *
      * @param cor cor do carro
      * @return objeto carro
      */
@@ -312,13 +372,14 @@ public class ControladorDeDados {
         }
         return null;
     }
-    
+
     /**
      * busca o carro pelo ID
+     *
      * @param id
      * @return objeto carro
      */
-    public Carro getCarroPorId(int id){
+    public Carro getCarroPorId(int id) {
         Carro c;
         Iterator<Carro> it = itCarro();
         while (it.hasNext()) {
@@ -327,24 +388,26 @@ public class ControladorDeDados {
                 return c;
             }
         }
-        return null;     
+        return null;
     }
-    
+
     /**
-     *Deleta um carro da lista encadeada a partir do seu nome, buscando-o pelo index
+     * Deleta um carro da lista encadeada a partir do seu nome, buscando-o pelo
+     * index
+     *
      * @param tag TAG do carro a ser removido
      * @return verdadeiro se foi removido com sucecsso
      */
     public boolean deleteCarro(String tag) {
-        if(hasCarro(tag)){
-           carros.remove(getIndexCarro(tag));
-           return true;
+        if (hasCarro(tag)) {
+            carros.remove(getIndexCarro(tag));
+            return true;
         }
         return false;
     }
-    
+
     /**
-     *Lista no console a lista de carros cadastradas no sistema no console
+     * Lista no console a lista de carros cadastradas no sistema no console
      */
     public void listarCarros() {
         Carro c;
@@ -354,17 +417,19 @@ public class ControladorDeDados {
             System.out.println(c.getTag());
         }
     }
-    
+
     /**
-     *Pega a referência da lista encadeada de carros
+     * Pega a referência da lista encadeada de carros
+     *
      * @return ArrayList de carros cadastrados
      */
     public ArrayList<Carro> getCarros() {
         return carros;
     }
-    
+
     /**
-     *Adiciona um jogador a lista encadeada se ele não existir 
+     * Adiciona um jogador a lista encadeada se ele não existir
+     *
      * @param jogador
      * @return
      */
@@ -373,32 +438,38 @@ public class ControladorDeDados {
     }
 
     /**
-     *Percorre a lista encadeada em busca de um jogador
-     * @param jogador 
+     * Percorre a lista encadeada em busca de um jogador
+     *
+     * @param jogador
      * @return Verdadeiro caso o jogador já esteja cadastrado
      */
     public boolean hasJogador(Jogador jogador) {
         Jogador jogadorAux;
         Iterator<Jogador> it = itJogadores();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             jogadorAux = it.next();
-            if(jogadorAux.equals(jogador)){ return true; }
+            if (jogadorAux.equals(jogador)) {
+                return true;
+            }
         }
         return false;
     }
-    
+
     public boolean hasJogador(String jogador) {
         Jogador jogadorAux;
         Iterator<Jogador> it = itJogadores();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             jogadorAux = it.next();
-            if(jogadorAux.getPiloto().getNome().equals(jogador)){ return true; }
+            if (jogadorAux.getPiloto().getNome().equals(jogador)) {
+                return true;
+            }
         }
         return false;
-    }    
-    
+    }
+
     /**
-     *Pega o iterador do ArrayList de jogadores
+     * Pega o iterador do ArrayList de jogadores
+     *
      * @return Iterador de jogadores
      */
     public Iterator<Jogador> itJogadores() {
@@ -406,102 +477,112 @@ public class ControladorDeDados {
     }
 
     /**
-     * Pega o jogador a partir do index 
+     * Pega o jogador a partir do index
+     *
      * @param jogador objeto jogador
      * @return objeto jogador a ser buscado
      */
     public Jogador getJogador(Jogador jogador) {
-        if(hasJogador(jogador)){
+        if (hasJogador(jogador)) {
             return jogadores.get(getIndexJogador(jogador));
         }
         return null;
     }
-    
-    
-    
+
     /**
-     * Percorre a lista encadeada em busca do index do jogador a partir de seu nome
+     * Percorre a lista encadeada em busca do index do jogador a partir de seu
+     * nome
+     *
      * @param jogador
      * @return número do index do jogador
      */
-    public int getIndexJogador(Jogador jogador){
+    public int getIndexJogador(Jogador jogador) {
         Jogador jogadorAux;
         Iterator<Jogador> it = itJogadores();
         int i = 0;
-        while(it.hasNext()){
+        while (it.hasNext()) {
             jogadorAux = it.next();
-            if(jogadorAux.equals(jogador)){ return i; }
+            if (jogadorAux.equals(jogador)) {
+                return i;
+            }
             i++;
         }
         return 0;
     }
-    
+
     /**
-     *Pega o jogador com determinado nome do piloto passado por parâmetro
+     * Pega o jogador com determinado nome do piloto passado por parâmetro
+     *
      * @param nomeDoPiloto nome do piloto
-     * @return o objeto piloto caso exista na lista encadeada 
+     * @return o objeto piloto caso exista na lista encadeada
      */
-    public Jogador getJogadorPorNomeDoPiloto(String nomeDoPiloto){
-        if(hasJogador(nomeDoPiloto)){
-            
-          Iterator<Jogador> it = itJogadores();
-          Jogador jogadorAux;
-          
-            while(it.hasNext()){
+    public Jogador getJogadorPorNomeDoPiloto(String nomeDoPiloto) {
+        if (hasJogador(nomeDoPiloto)) {
+
+            Iterator<Jogador> it = itJogadores();
+            Jogador jogadorAux;
+
+            while (it.hasNext()) {
                 jogadorAux = it.next();
-                if(jogadorAux.getPiloto().getNome().equals(nomeDoPiloto)){ return jogadorAux; }
-            }          
+                if (jogadorAux.getPiloto().getNome().equals(nomeDoPiloto)) {
+                    return jogadorAux;
+                }
+            }
         }
         return null;
     }
-    
-    
+
     /**
-     *Pega o jogador com determinado ID passado por parâmetro
+     * Pega o jogador com determinado ID passado por parâmetro
+     *
      * @param nomeDoPiloto nome do piloto
-     * @return o objeto piloto caso exista na lista encadeada 
+     * @return o objeto piloto caso exista na lista encadeada
      */
-    public Jogador getJogadorPorID(int id){
-            
-          Iterator<Jogador> it = itJogadores();
-          Jogador jogadorAux;
-          
-            while(it.hasNext()){
-                jogadorAux = it.next();
-                if(jogadorAux.getID() == id){ return jogadorAux; }
-            }          
+    public Jogador getJogadorPorID(int id) {
+
+        Iterator<Jogador> it = itJogadores();
+        Jogador jogadorAux;
+
+        while (it.hasNext()) {
+            jogadorAux = it.next();
+            if (jogadorAux.getID() == id) {
+                return jogadorAux;
+            }
+        }
         return null;
-    }    
-    
-    public ArrayList<Jogador> getJogadoresPorArrayDeID(int[] ids){
+    }
+
+    public ArrayList<Jogador> getJogadoresPorArrayDeID(int[] ids) {
         ArrayList<Jogador> jogadores = new ArrayList<>();
         for (int id : ids) {
             jogadores.add(getJogadorPorID(id));
         }
         return jogadores;
     }
+
     /**
-     *Deleta um objeto jogador
+     * Deleta um objeto jogador
+     *
      * @param jogador a ser removido
      * @return verdadeiro se for removido com sucesso
      */
-    public boolean deleteJogador(Jogador jogador){
-        if(hasJogador(jogador)){
+    public boolean deleteJogador(Jogador jogador) {
+        if (hasJogador(jogador)) {
             jogadores.remove(getIndexJogador(jogador));
             return true;
         }
         return false;
     }
-    
+
     /**
-     *Pega a referência da lista encadeada de Jogadores
+     * Pega a referência da lista encadeada de Jogadores
+     *
      * @return ArrayList de jogadores cadastrados
      */
     public ArrayList<Jogador> getJogadores() {
         return jogadores;
     }
-    
-    
+
     /**
      * A partir de um array de nomes de jogadores pré cadastrados no sistema que
      * querem participar da corrida ele joga os Objetos Jogador num array para
@@ -522,9 +603,85 @@ public class ControladorDeDados {
 
         return jogadoresDaCorrida;
 
-    }    
-    
+    }
 
+    public void salvandoDados() throws FileNotFoundException, IOException {
+
+        if (this.carros != null && this.carros.size() > 0) {
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileCarros));
+            output.writeObject(this.carros);
+        }
+
+        if (this.equipes != null && this.equipes.size() > 0) {
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileEquipes));
+            output.writeObject(this.equipes);
+        }
+
+        if (this.pilotos != null && this.pilotos.size() > 0) {
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(filePilotos));
+            output.writeObject(this.pilotos);
+        }
+
+        if (this.jogadores != null && this.jogadores.size() > 0) {
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileJogadores));
+            output.writeObject(this.jogadores);
+        }
+    }
+
+    public void lendoDados() throws FileNotFoundException, IOException, ClassNotFoundException {
+        if (fileCarros.length() > 0) {
+            ObjectInputStream inputCarros = new ObjectInputStream(new FileInputStream(fileCarros));
+            if (this.carros.isEmpty()) {
+                this.carros = (ArrayList<Carro>) inputCarros.readObject();
+                inputCarros.close();
+            }
+        }
+
+        if (fileEquipes.length() > 0) {
+            ObjectInputStream inputEquipes = new ObjectInputStream(new FileInputStream(fileEquipes));
+            if (this.equipes.isEmpty()) {
+                this.equipes = (ArrayList<Equipe>) inputEquipes.readObject();
+                inputEquipes.close();
+            }
+        }
+
+        if (filePilotos.length() > 0) {
+            ObjectInputStream inputPilotos = new ObjectInputStream(new FileInputStream(filePilotos));
+            if (this.pilotos.isEmpty()) {
+                this.pilotos = (ArrayList<Piloto>) inputPilotos.readObject();
+                inputPilotos.close();
+            }
+        }
+
+        if (fileJogadores.length() > 0) {
+            ObjectInputStream inputJogadores = new ObjectInputStream(new FileInputStream(fileJogadores));
+            if (this.jogadores.isEmpty()) {
+                this.jogadores = (ArrayList<Jogador>) inputJogadores.readObject();
+                inputJogadores.close();
+            }
+        }
+    }    
+        
+    public void criandoArquivos() throws IOException {
+        fileCarros = new File("filecarros.txt");
+        if(!fileCarros.exists()){
+            fileCarros = new File("filecarros.txt");
+        }
+        
+        fileEquipes = new File("fileequipes.txt");
+        if(!fileEquipes.exists()){
+            fileEquipes = new File("fileequipes.txt");
+        }
+        
+        filePilotos = new File("filepilotos.txt");
+        if(!filePilotos.exists()){
+            filePilotos = new File("filepilotos.txt");
+        }
+       
+        fileJogadores = new File("filejogadores.txt");
+        if(fileJogadores.exists()){
+            fileJogadores = new File("filejogadores.txt");
+        }
+    }
 
 }
-    

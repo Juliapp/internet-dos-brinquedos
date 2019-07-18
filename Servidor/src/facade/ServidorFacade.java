@@ -12,6 +12,7 @@ import execoes.CorridaNaoIniciadaException;
 import execoes.PilotoNaoExisteException;
 import execoes.TagInvalidaException;
 import execoes.VoltaInvalidaException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import model.Carro;
 import model.Equipe;
@@ -38,7 +39,7 @@ public class ServidorFacade {
      * feitas a partir desta classe, e nenhum controlador vai ser acessado senão
      * por ela.
      */
-    private ServidorFacade() {
+    private ServidorFacade() throws IOException, FileNotFoundException, ClassNotFoundException {
         Dados = new ControladorDeDados();
         cf = new ControladorFactory();
         contrCorrida = new ArrayList<>();
@@ -49,7 +50,7 @@ public class ServidorFacade {
         clientes = new ControladorDeClientes();
     }
 
-    public static synchronized ServidorFacade getInstance() {
+    public static synchronized ServidorFacade getInstance() throws IOException, FileNotFoundException, ClassNotFoundException {
         return (facade == null) ? facade = new ServidorFacade() : facade;
     }
 
@@ -365,6 +366,16 @@ public class ServidorFacade {
     public boolean statusCorrAtual() {
         return corridaAtual.getStatus();
     }
+    
+    public void criandoArquivos() throws IOException{
+        Dados.criandoArquivos();
+    }
+    public void lerDados() throws IOException, FileNotFoundException, ClassNotFoundException{
+        Dados.lendoDados();
+    }
+    public void armazenarDados() throws IOException{
+        Dados.salvandoDados();
+    }
 
     /**
      * *************************** MÉTODOS PARA A COMUNICAÇÃO
@@ -400,5 +411,7 @@ public class ServidorFacade {
     public ConectionIO getConectionIOSensor() {
         return clientes.getConectionIOSensor();
     }
+    
+    
 
 }

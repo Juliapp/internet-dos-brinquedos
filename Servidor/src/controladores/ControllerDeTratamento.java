@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -180,4 +181,17 @@ public class ControllerDeTratamento {
         return new Time(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
                 c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
     }
+    
+    public void tabelaExibicao(){
+        ArrayList <Jogador> jogadores = facade.getListaDeJogadores();
+        JSONArray arrayJogadores = new JSONArray();
+
+         while(jogadores.iterator().hasNext()){
+            Jogador j = jogadores.iterator().next();
+            arrayJogadores.put(j.toString());
+        }
+        JSONObject dados = new JSONObject();
+        dados.put("arrayDeJogadores", arrayJogadores);
+        respostaCliente("ClienteExib", dados);
+    }	    
 }

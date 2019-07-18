@@ -6,6 +6,7 @@ import comunicacao.ThreadConections;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.Scanner;
 import model.Carro;
 import model.Jogador;
 import org.json.JSONArray;
@@ -62,7 +63,9 @@ public class Admin {
         String op;
         String cor;
         String equipe;
+
         do {
+
             System.out.println("Informe a cor do carro!");
             cor = Console.readString();
 
@@ -138,12 +141,18 @@ public class Admin {
 
         System.out.println(facade.getRespostaJSON().getString("status"));
         iterarCarros();
-        String idCarro;
+        int idCarro = 0;
 
-        do {
+        try {
+
             System.out.println("Informe o ID do carro desejado!");
-            idCarro = Console.readString();
-        } while (idCarro.matches("[^\\d]+") == false);
+            idCarro = Console.readInt();
+
+        } catch (NumberFormatException e) {
+            System.out.println("Porfavor digite somente números!");
+            System.out.println("Informe o ID do carro desejado!");
+            idCarro = Console.readInt();
+        }
 
         JSONObject jogador = new JSONObject();
 
@@ -190,23 +199,28 @@ public class Admin {
     public void iniciaPartida() throws IOException, InterruptedException {
 
         String op;
-        String voltaas;
-        String quant;
+        int voltas;
+        int quant;
 
-        do {
+        try {
             System.out.println("Quantas voltas deseja?");
-            voltaas = Console.readString();
+            voltas = Console.readInt();
 
             System.out.println("Quantos jogadores irão jogar?");
-            quant = Console.readString();
-        } while (!voltaas.matches("[^\\d]+") | !quant.matches("[^\\d]+"));
-        Integer QuantosVaoJogar = new Integer(quant);
-        Integer voltas = new Integer(voltaas);
+            quant = Console.readInt();
+        } catch (NumberFormatException e) {
+            System.out.println("Digite somente números!!!");
+            System.out.println("Quantas voltas deseja?");
+            voltas = Console.readInt();
+
+            System.out.println("Quantos jogadores irão jogar?");
+            quant = Console.readInt();
+        }
 
         JSONArray jogadores_participantes = new JSONArray();
 
         percorreParticipantes();
-        for (int count = 0; count < QuantosVaoJogar; count++) {
+        for (int count = 0; count < quant; count++) {
             System.out.println("Informe o 'Id' do jogador que deseja cadastrar na corrida!");
             String aux = Console.readString();
             jogadores_participantes.put(Integer.parseInt(aux));
@@ -245,16 +259,18 @@ public class Admin {
                     facade.novaMensagem(dados.getString("solicitante"), bytes);
                     System.out.println(facade.getRespostaJSON().getString("status"));
 
+                    Thread.sleep(1000);
                     dados.put("command", "StatusCorrida");
                     inicia_partida = dados.toString();
                     bytes = inicia_partida.getBytes();
-                    while (facade.getRespostaJSON().getString("StatusCorrida").equals("Rodando")) {
+                    facade.novaMensagem(dados.getString("solicitante"), bytes);
+                    while (facade.getRespostaJSON().getString("status").equals("Rodando")) {
+                        Thread.sleep(2000);
                         facade.novaMensagem(dados.getString("solicitante"), bytes);
                     }
 
                     break;
             }
-            System.out.println(".");
 
         }
 

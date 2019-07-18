@@ -38,7 +38,7 @@ public class ClienteFacade {
     }
     
     public JSONObject getRespostaJSON() throws InterruptedException{
-        Thread.sleep(3000);
+     Thread.sleep(1500);
         return this.respostaJSON;
     }
     

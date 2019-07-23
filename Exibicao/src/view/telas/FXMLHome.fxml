@@ -7,9 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="655.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="655.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.controladores.FXMLHome">
     <children>
-      <TableView id="tabela" layoutX="149.0" layoutY="197.0" prefHeight="255.0" prefWidth="982.0">
+      <TableView id="tabela" fx:id="table" layoutX="149.0" layoutY="197.0" prefHeight="255.0" prefWidth="982.0">
         <columns>
           <TableColumn id="posicao" fx:id="posCol" prefWidth="58.0" text="POS" />
           <TableColumn id="cor" prefWidth="48.0" />

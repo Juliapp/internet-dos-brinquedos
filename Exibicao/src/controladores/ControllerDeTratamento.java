@@ -1,17 +1,19 @@
 package controladores;
 
-import facades.FacadeExibicao;
+import facade.FacadeExibicao;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.Item;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ControllerDeTratamento{
 
-    private FacadeExibicao facade;
+    private ObservableList<Item> list;
     
-    public ControllerDeTratamento(FacadeExibicao facade) {
-        this.facade = facade;
+    public ControllerDeTratamento() {
     }
 
     public byte[] convertToByte(String string) {
@@ -26,16 +28,22 @@ public class ControllerDeTratamento{
         JSONObject infos = new JSONObject(convertToString(bytes));
         JSONArray a = infos.getJSONArray("infos");
         
+        ArrayList<Item> array = new ArrayList();
+        
         for (int i = 0; i < a.length(); i++) {
             JSONObject jo = new JSONObject(a.getString(i));
             Item item = new Item(i+1, jo.getString("nome"), " ", jo.getString("ultimaVolta"), 
-                    jo.getString("maisRapida"), jo.getInt("voltas"));
+                                 jo.getString("maisRapida"), jo.getInt("voltas"));
+            array.add(item);
         }        
+        
+        list = FXCollections.observableList(array);
 
-    
     }
     
-    
+    public ObservableList<Item> getList(){
+        return list;
+    }
     
     
     

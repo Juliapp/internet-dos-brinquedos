@@ -3,6 +3,7 @@ package facade;
 import controladores.ControladorDeConexao;
 import controladores.ControladorDeTelas;
 import controladores.ControllerDeTratamento;
+import java.io.IOException;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 public class FacadeExibicao {
@@ -17,6 +18,7 @@ public class FacadeExibicao {
     private FacadeExibicao() {
         tratamento = new ControllerDeTratamento();
         conexao = new ControladorDeConexao(tratamento);
+        initialize();
     }
     
     public static synchronized FacadeExibicao getInstance() {
@@ -28,24 +30,21 @@ public class FacadeExibicao {
     }
     
     public void initialize(){
-        String ip = "127.0.0.1";
+        String ip = "172.16.103.214";
         int host = 1234;
         conexao.conectarServidor(ip, host);
     }
 
-    public void initialize(String ip, int host){
+    public void initialize(String ip){
+        int host = 1234;
         conexao.conectarServidor(ip, host);
-    }
-          
-    public void initialize(int host){
-        conexao.conectarServidor("127.0.0.1", 1234);
     }
     
     public void telaConect(){
         telas.telaConectarServer();
     }
     
-    public void telaHome(){
+    public void telaHome() throws IOException{
         telas.telaHome();
     }
     

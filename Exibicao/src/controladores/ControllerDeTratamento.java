@@ -30,6 +30,8 @@ public class ControllerDeTratamento{
         
         ArrayList<Item> array = new ArrayList();
         
+        /*
+        
         for (int i = 0; i < a.length(); i++) {
             JSONObject jo = new JSONObject(a.getString(i));
             Item item = new Item(i+1, jo.getString("nome"), " ", jo.getString("ultimaVolta"), 
@@ -38,6 +40,7 @@ public class ControllerDeTratamento{
         }        
         
         list = FXCollections.observableList(array);
+*/
 
     }
     

@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package view.controladores;
 
 import facade.FacadeExibicao;
@@ -7,10 +12,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import model.Item;
 
-public class FXMLHome implements Initializable {
+/**
+ * FXML Controller class
+ *
+ * @author nana-
+ */
+public class FXMLInicioController implements Initializable {
 
+    @FXML   private TableView<?> table;
     @FXML   private TableColumn<?, ?> posCol;
     @FXML   private TableColumn<?, ?> pilotoCol;
     @FXML   private TableColumn<?, ?> timeCol;
@@ -18,12 +28,11 @@ public class FXMLHome implements Initializable {
     @FXML   private TableColumn<?, ?> VoltaMRCol;
     @FXML   private TableColumn<?, ?> VoltasCol;
     
-    @FXML   private TableView<Item> table;
+    FacadeExibicao facade;
     
-    FacadeExibicao facade = FacadeExibicao.getInstance();
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        facade = FacadeExibicao.getInstance();
         table.getItems().setAll(facade.getList());
     }    
     

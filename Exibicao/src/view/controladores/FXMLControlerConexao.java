@@ -6,43 +6,54 @@
 package view.controladores;
 
 import facade.FacadeExibicao;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import model.Item;
 
 public class FXMLControlerConexao implements Initializable {
 
     @FXML   private Button conectarServer;
     @FXML   private TextField entradaIP;
-    @FXML   private TextField entradaPorta;
 
     FacadeExibicao facade;
+    @FXML
+    private Label label1;
+    @FXML
+    private Label label2;
+    @FXML
+    private TableView<Item> table;
             
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         facade = FacadeExibicao.getInstance();
+        table.getItems().setAll(facade.getList());
     }    
 
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        
-        if(entradaPorta.getText() != null){
-            if(entradaIP.getText() == null){
-                facade.initialize(Integer.parseInt(entradaPorta.getText()));
-            }else if(entradaIP.getText() != null){
-                facade.initialize(entradaIP.getText(),Integer.parseInt(entradaPorta.getText()));
-            }
-            conectarServer.setDisable(true);
+    private void handleButtonAction(ActionEvent event) throws IOException {
+
+        table.setVisible(false);
+        if(entradaIP.getText() == null){
+            facade.initialize();
+        }else if(entradaIP.getText() != null){
+            facade.initialize(entradaIP.getText());
         }
+        conectarServer.setDisable(true);
         
-        facade.telaHome();
+        entradaIP.setVisible(false);
+        label1.setVisible(false);
+        label2.setVisible(false);
+        table.setVisible(true);
+        
     }
     
 }

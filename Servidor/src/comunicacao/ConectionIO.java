@@ -4,6 +4,7 @@ import controladores.ControladorDeMensagens;
 import controladores.ControllerDeTratamento;
 import execoes.PilotoNaoExisteException;
 import java.io.DataInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,7 +33,7 @@ public class ConectionIO {
         return id;
     }
 
-    public void tratar() throws IOException, PilotoNaoExisteException, InterruptedException {
+    public void tratar() throws IOException, PilotoNaoExisteException, InterruptedException, FileNotFoundException, ClassNotFoundException {
         tratarOutput(output);
         tratarInput(input);
     }
@@ -48,7 +49,7 @@ public class ConectionIO {
         }    
     }
     
-    private void tratarInput(InputStream input) throws IOException, PilotoNaoExisteException{
+    private void tratarInput(InputStream input) throws IOException, PilotoNaoExisteException, FileNotFoundException, ClassNotFoundException{
         byte[] bytes = toByteArray(input);
         if(bytes.length > 0){
             tratamento.tratarMensagem(bytes);

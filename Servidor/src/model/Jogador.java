@@ -1,6 +1,12 @@
 package model;
 
-public class Jogador {
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+public class Jogador implements Serializable {
+    private static final long serialVersionUID = 3L;
     private Carro carro;
     private Piloto piloto;
     private Time voltaMaisRapida;
@@ -120,10 +126,8 @@ public class Jogador {
 
     @Override
     public String toString() {
-        return '{' + "Id: "+ id + " nome: " + piloto.getNome() + " Id-Carro: " 
-                + carro.getId() + " Equipe: " + carro.getEquipe().getNome() + " Cor: " + carro.getCor()
-                + "ultimaVolta: " + ultimaVoltaComputada.toString() + "maisRapida: " +voltaMaisRapida.toString() 
-                +"voltas: " + voltas + '}';
+        return '{' + "Id: "+ id + " Nome: " + piloto.getNome() + " Id-Carro: " 
+                + carro.getId() + " Equipe: " + carro.getEquipe().getNome() + " Cor: " + carro.getCor() + '}';
     }
     
     

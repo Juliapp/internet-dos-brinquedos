@@ -1,6 +1,7 @@
 package comunicacao;
 
 import execoes.PilotoNaoExisteException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,9 +33,9 @@ public class ThreadConections extends Thread{
                 adm.tratar();
                 exib.tratar();
                 sensor.tratar();
-            } catch (IOException | PilotoNaoExisteException | InterruptedException ex) {
-                Logger.getLogger(ThreadConections.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }catch (IOException | PilotoNaoExisteException | InterruptedException | ClassNotFoundException ex) {
+                System.out.println("Erro: " + ex);
+            } 
         }
         
     }

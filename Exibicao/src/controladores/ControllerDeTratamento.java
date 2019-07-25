@@ -14,6 +14,7 @@ public class ControllerDeTratamento{
     private ObservableList<Item> list;
     
     public ControllerDeTratamento() {
+        initialize();
     }
 
     public byte[] convertToByte(String string) {
@@ -26,11 +27,11 @@ public class ControllerDeTratamento{
 
     public void tratarMensagem(byte[] bytes) {
         JSONObject infos = new JSONObject(convertToString(bytes));
-        JSONArray a = infos.getJSONArray("infos");
+        JSONArray a = infos.getJSONArray("arrayDeJogadores");
         
         ArrayList<Item> array = new ArrayList();
         
-        /*
+        System.out.println(a.toString());
         
         for (int i = 0; i < a.length(); i++) {
             JSONObject jo = new JSONObject(a.getString(i));
@@ -40,7 +41,8 @@ public class ControllerDeTratamento{
         }        
         
         list = FXCollections.observableList(array);
-*/
+        
+        System.out.println("aqui");
 
     }
     
@@ -48,6 +50,10 @@ public class ControllerDeTratamento{
         return list;
     }
     
-    
+    public void initialize(){
+        ArrayList<Item> a = new ArrayList();
+        a.add(new Item(0, "", "","", "", 0));
+        list = FXCollections.observableList(a);
+    }
     
 }

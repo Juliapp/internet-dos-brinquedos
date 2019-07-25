@@ -36,13 +36,13 @@ public class FXMLControlerConexao implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
-/*
+
         if(entradaIP.getText() == null){
             facade.initialize();
         }else if(entradaIP.getText() != null){
             facade.initialize(entradaIP.getText());
         }
-*/
+
         conectarServer.setDisable(true);
         facade.telaHome();
     }

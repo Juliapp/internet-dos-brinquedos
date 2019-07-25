@@ -28,7 +28,7 @@ public class FXMLHome implements Initializable {
         try{
             table.getItems().setAll(facade.getList());
         }catch(NullPointerException e){
-    }
+        }
     }    
     
 }

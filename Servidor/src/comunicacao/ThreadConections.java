@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ThreadConections extends Thread{
+public class ThreadConections extends Thread {
+
     ConectionIO adm;
     ConectionIO exib;
     ConectionIO sensor;
@@ -16,28 +17,28 @@ public class ThreadConections extends Thread{
         this.exib = exib;
         this.sensor = sensor;
     }
-    
-    public ThreadConections(ConectionIO adm, ConectionIO exib) {
+
+    public ThreadConections(ConectionIO adm, ConectionIO sensor) {
         this.adm = adm;
-        this.exib = exib;
+        this.sensor = sensor;
     }
-    
-    public ThreadConections(ConectionIO adm){
+
+    public ThreadConections(ConectionIO adm) {
         this.adm = adm;
     }
-    
+
     @Override
     public void run() {
-        while(!Thread.currentThread().isInterrupted()){
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 adm.tratar();
                 exib.tratar();
                 sensor.tratar();
-            }catch (IOException | PilotoNaoExisteException | InterruptedException | ClassNotFoundException ex) {
+            } catch (IOException | PilotoNaoExisteException | InterruptedException | ClassNotFoundException ex) {
                 System.out.println("Erro: " + ex);
-            } 
+            }
         }
-        
+
     }
-    
+
 }

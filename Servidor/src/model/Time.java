@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 
 public class Time implements Serializable{
-     private static final long serialVersionUID = 6L;
+    // private static final long serialVersionUID = 6L;
     private double horas;
     private double minutos;
     private double segundos;

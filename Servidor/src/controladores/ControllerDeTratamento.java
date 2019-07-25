@@ -174,30 +174,16 @@ public class ControllerDeTratamento {
 
     }
 
-    public Time converterTempo(String tempo) throws ParseException {
-        /*
-        SimpleDateFormat parseData = new SimpleDateFormat("yyyy-MM-ddEHH:mm:ss.SSS");
-        Calendar c = GregorianCalendar.getInstance();
-        c.setTime(parseData.parse(tempo.split("-0300")[0]));
-        */
-        String[] a = tempo.split(":");
-        String min = a[1];
-        
-        System.out.println(a[0]);
-        System.out.println(a[1]);
-        System.out.println(a[2]);
-        
-        String[] b = a[2].split(".");
-        System.out.println(b[0]);
-        System.out.println(b[1]);
-        String seg = b[0];
-        
-        String[] c = b[1].split("-0300");
-        String mil = c[0];
-        System.out.println(min + seg + mil);
+    public Time converterTempo(String data) throws ParseException {
 
-        return new Time(0, Integer.parseInt(min),
-                Integer.parseInt(seg), Integer.parseInt(mil));
+        String hora = data.substring(11, 13);
+        String minuto = data.substring(14, 16);
+        String segundo = data.substring(17, 19);
+        String mil = data.substring(20, 23);
+
+        return new Time(0, Integer.parseInt(minuto),
+                Integer.parseInt(segundo), Integer.parseInt(mil));
+
     }
 
     public void tabelaExibicao() {

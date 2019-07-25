@@ -287,10 +287,11 @@ public class ControladorDeDados {
     public boolean addCarro(Carro carro) {
         if (this.carros.isEmpty()) {
             this.carros.add(carro);
-        } else if (!hasCarro(carro.getTag())) {
+        } else if (!hasCarro(carro.getTag()) && !hasId(carro.getId())) {
             carros.add(carro);
-        } else {
-            return false;
+        } else if(!hasCarro(carro.getTag()) && hasId(carro.getId())) {
+            carro.setId(carro.getId()+1);
+            carros.add(carro);
         }
         return true;
     }
@@ -299,6 +300,7 @@ public class ControladorDeDados {
      * Percorre a lista encadeada em busca de um carro com a mesma tag.
      *
      * @param tag tag do carro a ser buscada
+     * @param id
      * @return Verdadeiro caso o carro já esteja cadastrado
      */
     public boolean hasCarro(String tag) {
@@ -307,6 +309,17 @@ public class ControladorDeDados {
         while (it.hasNext()) {
             carro = it.next();
             if (carro.getTag().equals(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasId(int id){
+        Carro carro;
+        Iterator<Carro> it = itCarro();
+        while (it.hasNext()) {
+            carro = it.next();
+            if (carro.getId() == id) {
                 return true;
             }
         }

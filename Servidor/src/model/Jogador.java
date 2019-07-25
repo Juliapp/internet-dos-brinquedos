@@ -20,6 +20,8 @@ public class Jogador implements Serializable {
 
     public Jogador(Carro carro, Piloto piloto) {
         voltaMaisRapida = new Time(0,0,0,0);
+        ultimaVoltaComputada = new Time(0,0,0,0);
+        tempoDeCorridaFinal = new Time(0,0,0,0);
         this.carro = carro;
         this.piloto = piloto;
         pitStops = 0;
@@ -123,11 +125,15 @@ public class Jogador implements Serializable {
         return false;
         
     }
+    
+    
 
     @Override
     public String toString() {
         return '{' + "Id: "+ id + " Nome: " + piloto.getNome() + " Id-Carro: " 
-                + carro.getId() + " Equipe: " + carro.getEquipe().getNome() + " Cor: " + carro.getCor() + '}';
+                + carro.getId() + " Equipe: " + carro.getEquipe().getNome() + " Cor: " + carro.getCor() +
+                "Volta: " + getVolta() + "Tempo de Corrida: " + getTempoDeCorrida() +"Volta Mais Rápida: "+ getVoltaMaisRapida() +
+                "Tempo de Corrida Final: "+ getTempoDeCorridaFinal() + '}';
     }
     
     

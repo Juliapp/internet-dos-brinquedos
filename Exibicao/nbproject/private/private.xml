@@ -3,6 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group/>
-        <group name="internet-dos-brinquedos-JEM"/>
+        <group name="internet-dos-brinquedos-JEM">
+            <file>file:/C:/Users/nana-/OneDrive/Documents/UEFS/4%20semestre/internet-dos-brinquedos-JEM/Exibicao/src/view/telas/FXMLTabela.fxml</file>
+            <file>file:/C:/Users/nana-/OneDrive/Documents/UEFS/4%20semestre/internet-dos-brinquedos-JEM/Exibicao/src/facade/FacadeExibicao.java</file>
+            <file>file:/C:/Users/nana-/OneDrive/Documents/UEFS/4%20semestre/internet-dos-brinquedos-JEM/Exibicao/src/controladores/ControllerDeTratamento.java</file>
+            <file>file:/C:/Users/nana-/OneDrive/Documents/UEFS/4%20semestre/internet-dos-brinquedos-JEM/Exibicao/src/exibtcom/Exibicao.java</file>
+        </group>
     </open-files>
 </project-private>

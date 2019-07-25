@@ -8,7 +8,9 @@ public class Exibicao extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        FacadeExibicao facade = FacadeExibicao.getInstance();        
+        FacadeExibicao facade = FacadeExibicao.getInstance(); 
+        facade.putStage(stage);
+        facade.telaConect();
     }
 
     public static void main(String[] args) {

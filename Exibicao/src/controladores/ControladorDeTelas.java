@@ -29,7 +29,7 @@ public class ControladorDeTelas {
     }
 
     public void telaHome() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/telas/FXMLTabela.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource(HOME.getValue()));
 
         stage.getScene().setRoot(root);
         stage.setFullScreen(true);

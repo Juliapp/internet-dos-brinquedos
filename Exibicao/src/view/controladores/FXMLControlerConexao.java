@@ -25,35 +25,26 @@ public class FXMLControlerConexao implements Initializable {
     @FXML   private TextField entradaIP;
 
     FacadeExibicao facade;
-    @FXML
-    private Label label1;
-    @FXML
-    private Label label2;
-    @FXML
-    private TableView<Item> table;
+    
+    @FXML   private Label label1;
+    @FXML   private Label label2;
             
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         facade = FacadeExibicao.getInstance();
-        table.getItems().setAll(facade.getList());
     }    
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
-
-        table.setVisible(false);
+/*
         if(entradaIP.getText() == null){
             facade.initialize();
         }else if(entradaIP.getText() != null){
             facade.initialize(entradaIP.getText());
         }
+*/
         conectarServer.setDisable(true);
-        
-        entradaIP.setVisible(false);
-        label1.setVisible(false);
-        label2.setVisible(false);
-        table.setVisible(true);
-        
+        facade.telaHome();
     }
     
 }

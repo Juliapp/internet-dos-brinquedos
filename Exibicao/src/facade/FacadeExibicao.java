@@ -18,7 +18,6 @@ public class FacadeExibicao {
     private FacadeExibicao() {
         tratamento = new ControllerDeTratamento();
         conexao = new ControladorDeConexao(tratamento);
-        initialize();
     }
     
     public static synchronized FacadeExibicao getInstance() {

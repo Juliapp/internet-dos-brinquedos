@@ -20,11 +20,15 @@ public class FXMLHome implements Initializable {
     
     @FXML   private TableView<Item> table;
     
-    FacadeExibicao facade = FacadeExibicao.getInstance();
+    FacadeExibicao facade;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        table.getItems().setAll(facade.getList());
+        facade = FacadeExibicao.getInstance();
+        try{
+            table.getItems().setAll(facade.getList());
+        }catch(NullPointerException e){
+    }
     }    
     
 }

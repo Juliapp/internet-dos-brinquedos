@@ -52,14 +52,12 @@ public class ControllerDeTratamento {
     public void respostaCliente(String id, JSONObject resposta) {
         String info = resposta.toString();
         byte[] bytes = convertToByte(info);
-        System.out.println(bytes.length);
         mensagem.novaMensagem(id, bytes);
     }
 
     public void tratarMensagem(byte[] bytes) throws PilotoNaoExisteException, IOException, FileNotFoundException, ClassNotFoundException {
 
         String info = new String(bytes, StandardCharsets.UTF_8);
-        System.out.println(info);
         JSONObject dados = new JSONObject(info);
         switch (dados.getString("solicitante")) {
             case "ClienteADM":
@@ -142,7 +140,6 @@ public class ControllerDeTratamento {
                     case "ComeçarCorrida":
                         if (facade.comecarCorrida()) {
                             rodandoCorrida = facade.statusCorrAtual();
-                            System.out.println(rodandoCorrida);
                             dados.put("status", "Corrida Iniciada, Tudo pronto!!!");
                             respostaCliente(dados.getString("solicitante"), dados);
                         }
@@ -189,9 +186,10 @@ public class ControllerDeTratamento {
     public void tabelaExibicao() {
         ArrayList<Jogador> jogadores = facade.getListaDeJogadores();
         JSONArray arrayJogadores = new JSONArray();
-
-        while (jogadores.iterator().hasNext()) {
-            Jogador j = jogadores.iterator().next();
+        
+        Iterator<Jogador> iteraJ = jogadores.iterator();
+        while (iteraJ.hasNext()) {
+            Jogador j = iteraJ.next();
             arrayJogadores.put(j.toString());
         }
         JSONObject dados = new JSONObject();

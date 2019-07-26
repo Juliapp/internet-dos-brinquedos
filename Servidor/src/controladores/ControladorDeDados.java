@@ -33,10 +33,10 @@ public class ControladorDeDados {
     private ArrayList<Carro> carros;
     private ArrayList<Jogador> jogadores;
 
-    File fileCarros = null;
-    File fileEquipes = null;
-    File filePilotos = null;
-    File fileJogadores = null;
+    private File fileCarros = null;
+    private File fileEquipes = null;
+    private File filePilotos = null;
+    private File fileJogadores = null;
 
     /**
      * Instancia das listas encadeadas

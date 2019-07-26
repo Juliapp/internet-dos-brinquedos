@@ -24,6 +24,7 @@ public class Jogador implements Serializable {
         tempoDeCorridaFinal = new Time(0,0,0,0);
         this.carro = carro;
         this.piloto = piloto;
+        this.voltas = 0;
         pitStops = 0;
         this.id = numero++;
     }
@@ -103,12 +104,10 @@ public class Jogador implements Serializable {
     }
     
     public void completouVolta(){
-        voltas++;
+        voltas = voltas+1;
     }
 
-    public int getVoltas() {
-        return voltas;
-    }
+    
 
     public void setVoltas(int voltas) {
         this.voltas = voltas;
@@ -130,10 +129,15 @@ public class Jogador implements Serializable {
 
     @Override
     public String toString() {
-        return '{' + "Id: "+ id + " Nome: " + piloto.getNome() + " Id-Carro: " 
-                + carro.getId() + " Equipe: " + carro.getEquipe().getNome() + " Cor: " + carro.getCor() +
-                "Volta: " + getVolta() + "Tempo de Corrida: " + getTempoDeCorrida() +"Volta Mais Rápida: "+ getVoltaMaisRapida() +
-                "Tempo de Corrida Final: "+ getTempoDeCorridaFinal() + '}';
+        return '{' + "Id: "+ id + 
+                ",Nome: " + piloto.getNome() 
+                + ",Id-Carro: " + carro.getId() + 
+                ",Equipe: " + carro.getEquipe().getNome() + 
+                ",Cor: " + carro.getCor() +
+                ",Volta: " + getVolta() + 
+                ",Tempo de Corrida: " + getTempoDeCorrida() 
+                +",Volta Mais Rápida: "+ getVoltaMaisRapida() +
+                ",Tempo de Corrida Final: "+ getTempoDeCorridaFinal() + '}';
     }
     
     

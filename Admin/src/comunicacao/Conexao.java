@@ -6,13 +6,18 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**Classe que estabelece a comunicação
+ * do cliente Admin com o Servidor.
+ * 
+ * @author Mateus Guimarães
+ * @author Juliana Aragão
+ */
 public class Conexao{
     private Socket socket;
     private final Solicitante id;
     private int porta;
     private ConectionIO io;
     
-    private final int PORTA = 5555;
 
     private final ControllerDeTratamento tratamento;
     private final ControladorDeMensagens mensagens;
@@ -23,10 +28,16 @@ public class Conexao{
         this.id = id;
     }
     
+    /**Método responsável por dar início ao processo
+     * de conexão
+     * 
+     * @throws IOException 
+     */
     public void iniciar() throws IOException {
         conectar();
         io = new ConectionIO(socket, id, tratamento, mensagens);
     }
+    
     
     public ConectionIO getConectionIO(){
         return io;
@@ -37,25 +48,52 @@ public class Conexao{
 
     }
     
+    /**Método que inicializa o socket do cliente
+     * Admin no caso onde o Servidor é
+     * executado na mesma máquina.
+     * 
+     * @param porta
+     * @return Socket
+     * @throws IOException 
+     */
     private Socket criarSocket(int porta) throws IOException {
         this.porta = porta;
         return socket = new Socket("127.0.0.1" , porta);
     }
     
+    /**Método que inicializa o socket do cliente
+     * Admin no caso onde o Servidor é
+     * executado em outra máquina, solicitando
+     * o endereço(ip).
+     * 
+     * @param host
+     * @param porta
+     * @return
+     * @throws IOException 
+     */
      private Socket criarSocket(String host, int porta) throws IOException {
         this.porta = porta;
         return socket = new Socket(host , porta);
     }   
    
+    /**Getter da porta 
+     * 
+     * @return 
+     */
     public int getPorta(){
         return porta;
     }
     
+    /**Método que coleta informações necessárias 
+     * sobre a inicialização da conexão 
+     * 
+     * @throws IOException 
+     */
     private void conectar() throws IOException{
         boolean entrou = false;
 
         do{
-            System.out.println("O cliente vai rodar na mesma placa de rede? S/N");
+            System.out.println("O cliente vai rodar na mesma placa de rede que o servidor? S/N");
             System.out.println("Você pode trocar a opção digitando a resposta errada.");
             Scanner s = new Scanner(System.in);
             String resposta = s.nextLine();

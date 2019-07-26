@@ -3,6 +3,11 @@ package controladores;
 import comunicacao.Mensagem;
 import comunicacao.Solicitante;
 
+/**Classe que controla o envio e recebimento
+ * de Mensagens
+ * 
+ * @author Teeu Guima
+ */
 public class ControladorDeMensagens {
     private Mensagem mensagemServidor;
    

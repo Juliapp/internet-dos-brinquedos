@@ -22,7 +22,13 @@ public class Admin {
     public Admin() {
         this.facade = new ClienteFacade();
     }
-
+ 
+    /**Controla a opção de retorno
+     * ao menu principal.
+     * 
+     * @param opc - String que recebe o caractere S ou s para verificação.
+     * @return Retorna um inteiro, 1 para voltar ao menu ou -1 para continuar na operação.
+     */
     private int voltarMenu(String opc) {
         this.opc = opc;
         if (opc.equals("S") | opc.equals("s")) {
@@ -31,11 +37,22 @@ public class Admin {
             return -1;
         }
     }
-
+    
+    /** Getter para obter valor da string que captura a
+     * opção de retorno ao menu.
+     *
+     * @return String da opção designada. 
+     */
     public String getOpc() {
         return opc;
     }
-
+    
+    /**Para criação do menu principal
+     * pro usuário.
+     * 
+     * @return inteiro com a opção desejada.
+     * @throws IOException 
+     */
     public int menuPrincipal() throws IOException {
         int opc = 0;
         try {
@@ -52,29 +69,28 @@ public class Admin {
         }
         return opc;
     }
-
-    public void testJSON() {
-        String dado = "{ \"tag\" : \"AS0293FHUSID\" , \"hora\" : 2 , \"minutos\" : 3 , \"segundos\" : 4 , \"milesimos\" : 5 }";
-        JSONObject convert = new JSONObject(dado);
-        System.out.println(convert.toString());
-    }
-
+    
+    /**Coleta dos dados de carros
+     * para enviar pro servidor, visando a criação de partidas. 
+     * 
+     * @return inteiro para controlar repetição.
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     public int cadastroCarros() throws IOException, InterruptedException {
         String op;
         String cor;
         String equipe;
 
         do {
-
             System.out.println("Informe a cor do carro!");
             cor = Console.readString();
 
             System.out.println("Informe a equipe pertencente!");
             equipe = Console.readString();
-
         } while (!cor.matches("[^\\d]+") | !equipe.matches("[^\\d]+"));
 
-        JSONObject carro = new JSONObject();
+        JSONObject carro = new JSONObject(); //Json para encapsular as informações sobre o carro
 
         carro.put("cor", cor);
         carro.put("equipe", equipe);
@@ -83,7 +99,7 @@ public class Admin {
 
         String dados_carro = carro.toString();
 
-        byte[] bytes = dados_carro.getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = dados_carro.getBytes(StandardCharsets.UTF_8); //Convertendo os dados em um array de bytes
         facade.novaMensagem(carro.getString("solicitante"), bytes);
 
         System.out.println(facade.getRespostaJSON().getString("status"));
@@ -98,7 +114,14 @@ public class Admin {
         }
 
     }
-
+    
+    /**Responsável pela iteração dos 
+     * carros cadastrados no sistema, exibindo
+     * as informações principais como cor, equipe
+     * id e tag do carro.
+     * 
+     * @throws InterruptedException 
+     */
     public void iterarCarros() throws InterruptedException {
         //buscar o byte, converter em JSONArray e ler as informações
         JSONObject iterar = new JSONObject();
@@ -120,6 +143,14 @@ public class Admin {
 
     }
 
+    /**Coleta dos dados relacionados ao jogador
+     * como o seu nome e o carro desejado para
+     * a corrida
+     * 
+     * @return inteiro correspondente a opção do carro.
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     public int cadastroJogadores() throws IOException, InterruptedException {
         String op;
         String nome;
@@ -128,7 +159,7 @@ public class Admin {
             nome = Console.readString();
 
         } while (!nome.matches("[^\\d]+"));
-        JSONObject piloto = new JSONObject();
+        JSONObject piloto = new JSONObject(); //Json que encapsula o nome do jogador
 
         piloto.put("nomePiloto", nome);
         piloto.put("solicitante", "ClienteADM");
@@ -136,7 +167,7 @@ public class Admin {
 
         String dados_piloto = piloto.toString();
 
-        byte[] bytes = dados_piloto.getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = dados_piloto.getBytes(StandardCharsets.UTF_8); //Convertendo os dados em um vetor de byte
         facade.novaMensagem(piloto.getString("solicitante"), bytes);
 
         System.out.println(facade.getRespostaJSON().getString("status"));
@@ -154,7 +185,7 @@ public class Admin {
             idCarro = Console.readInt();
         }
 
-        JSONObject jogador = new JSONObject();
+        JSONObject jogador = new JSONObject(); //Json que encapsula o id do carro e nome.
 
         jogador.put("idCarro", idCarro);
         jogador.put("nome", nome);
@@ -177,6 +208,10 @@ public class Admin {
 
     }
 
+    /**Percorre todos os jogadores já cadastrados.
+     * 
+     * @throws InterruptedException 
+     */
     public void percorreParticipantes() throws InterruptedException {
         JSONObject iterar = new JSONObject();
 
@@ -186,16 +221,24 @@ public class Admin {
         String dados_carro = iterar.toString();
 
         byte[] bytes = dados_carro.getBytes(StandardCharsets.UTF_8);
-        facade.novaMensagem(iterar.getString("solicitante"), bytes);
+        facade.novaMensagem(iterar.getString("solicitante"), bytes); //Solicitando o JSONArray
 
-        JSONArray array = facade.getRespostaJSON().getJSONArray("arrayDeJogadores");
+        JSONArray array = facade.getRespostaJSON().getJSONArray("arrayDeJogadores"); //Recebendo o JSONArray do servidor
 
+        /*
+        Laço for para printar as informações principais dos jogadores
+        */
         for (int i = 0; i < array.length(); i++) {
             String info = array.getString(i);
             System.out.println(info);
         }
     }
 
+    /**Dá largada a corrida
+     * 
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     public void iniciaPartida() throws IOException, InterruptedException {
 
         String op;
@@ -217,16 +260,21 @@ public class Admin {
             quant = Console.readInt();
         }
 
-        JSONArray jogadores_participantes = new JSONArray();
+        JSONArray jogadores_participantes = new JSONArray(); 
 
-        percorreParticipantes();
+        percorreParticipantes(); //Percorrendo os jogadores já cadastrados
+        /*
+        Laço for onde deverá selecionar os jogadores
+        participantes da corrida, baseado na quantidade
+        de jogadores escolhida
+        */
         for (int count = 0; count < quant; count++) {
             System.out.println("Informe o 'Id' do jogador que deseja cadastrar na corrida!");
             String aux = Console.readString();
-            jogadores_participantes.put(Integer.parseInt(aux));
+            jogadores_participantes.put(Integer.parseInt(aux)); //Adicionando os respectivos id dos jogadores
         }
 
-        JSONObject dados = new JSONObject();
+        JSONObject dados = new JSONObject(); //Json que encapsula os dados necessário para preconfiguração da corrida
         dados.put("ids_jogadores", jogadores_participantes);
         dados.put("num_voltas", voltas);
         dados.put("solicitante", "ClienteADM");
@@ -235,7 +283,7 @@ public class Admin {
         String inicia_partida = dados.toString();
 
         byte[] bytes = inicia_partida.getBytes();
-        facade.novaMensagem(dados.getString("solicitante"), bytes);
+        facade.novaMensagem(dados.getString("solicitante"), bytes); //Enviando pré-configuração da corrida.
 
         for (int count = 0; count <= 100; count++) {
             switch (count) {
@@ -256,22 +304,26 @@ public class Admin {
                     inicia_partida = dados.toString();
 
                     bytes = inicia_partida.getBytes();
-                    facade.novaMensagem(dados.getString("solicitante"), bytes);
-                    System.out.println(facade.getRespostaJSON().getString("status"));
+                    facade.novaMensagem(dados.getString("solicitante"), bytes); //Dando largada
+                    System.out.println(facade.getRespostaJSON().getString("status")); // Printando retorno do servidor
 
-                    Thread.sleep(1000);
+                    Thread.sleep(1000); //Espera 1 segundo para solicitar status da corrida!
                     dados.put("command", "StatusCorrida");
                     inicia_partida = dados.toString();
                     bytes = inicia_partida.getBytes();
                     facade.novaMensagem(dados.getString("solicitante"), bytes);
+                    
+                    /*
+                    Laço while para verificar o andamento da corrida!
+                    */
                     while (facade.getRespostaJSON().getString("status").equals("Rodando")) {
-                        Thread.sleep(2000);
+                        Thread.sleep(2000); //Espera 2 segundos para verificar novamente
                         facade.novaMensagem(dados.getString("solicitante"), bytes);
                     }
 
                     break;
             }
-
+            System.out.println(".");
         }
 
     }

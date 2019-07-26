@@ -2,6 +2,13 @@ package comunicacao;
 
 import org.json.JSONObject;
 
+/**Classe responsável por aplicar
+ * empacotamento dos dados que vão
+ * ser armazenados no servidor.
+ * 
+ * @author Mateus Guimarães
+ * @author Juliana Aragão
+ */
 public class Mensagem {
     private Solicitante solicitante;
     private boolean has;

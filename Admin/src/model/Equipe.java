@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class Equipe implements Serializable {
-    private static final long serialVersionUID = 4L;
     private String nome;  
     private ArrayList<Carro> carros;;
 

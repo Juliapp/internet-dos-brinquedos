@@ -5,6 +5,12 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**Classe que inicializa e controla a
+ * thread para a conexão.
+ * 
+ * @author Mateus Guimarães
+ * @author Juliana Aragão
+ */
 public class ThreadConections extends Thread{
     ConectionIO servidor;
 

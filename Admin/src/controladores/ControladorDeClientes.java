@@ -6,6 +6,12 @@ import comunicacao.Mensagem;
 import comunicacao.Solicitante;
 import java.io.IOException;
 
+/**Classe que aplica um protocolo sobre a comunicação
+ * com servidor, controlando a instância do cliente.
+ * 
+ * @author Mateus Guimarães
+ * @author Juliana Aragão
+ */
 public class ControladorDeClientes {
    private Conexao admin;
    

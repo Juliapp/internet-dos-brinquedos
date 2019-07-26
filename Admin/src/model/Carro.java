@@ -1,9 +1,11 @@
 package model;
 
 import java.io.Serializable;
-
+/**
+ * 
+ * @author Teeu Guima
+ */
 public class Carro implements Serializable {
-    private static final long serialVersionUID = 2L;
     private static int numero = 0;
     private int id;
     private String tag;
